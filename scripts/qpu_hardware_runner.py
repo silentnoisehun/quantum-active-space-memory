@@ -28,20 +28,29 @@ def get_service():
     token = os.environ.get("IBMQ_TOKEN") or os.environ.get("IBM_QUANTUM_TOKEN")
     
     if not token:
-        # Check standard download paths for apikey json
         downloads = Path(os.environ["USERPROFILE"]) / "Downloads"
-        key_files = sorted(downloads.glob("*apikey*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
-        if key_files:
+        # Prioritize apikey (1) (1).json
+        preferred = downloads / "apikey (1) (1).json"
+        if preferred.exists():
             try:
-                data = json.loads(key_files[0].read_text(encoding="utf-8"))
+                data = json.loads(preferred.read_text(encoding="utf-8"))
                 token = data.get("apikey") or data.get("token")
             except Exception:
                 pass
                 
+        if not token:
+            key_files = sorted(downloads.glob("*apikey*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+            if key_files:
+                try:
+                    data = json.loads(key_files[0].read_text(encoding="utf-8"))
+                    token = data.get("apikey") or data.get("token")
+                except Exception:
+                    pass
+                
     if token:
-        return QiskitRuntimeService(channel="ibm_quantum", token=token)
+        return QiskitRuntimeService(channel="ibm_quantum_platform", token=token, instance="auto")
     else:
-        return QiskitRuntimeService(channel="ibm_quantum")
+        return QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
 
 def run_hardware_zeno(backend_name=None, cycles=20, shots=1000):
     print("=" * 82)
