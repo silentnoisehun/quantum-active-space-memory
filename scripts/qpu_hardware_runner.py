@@ -20,39 +20,24 @@ from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from zeno_circuit_builder import build_active_zeno_circuit, build_passive_control_circuit
 
-def get_service():
+def get_service(key_filename="apikey (3).json"):
     """
-    Initializes QiskitRuntimeService from environment variable, saved account,
-    or local apikey JSON file.
+    Initializes QiskitRuntimeService from specified apikey JSON file.
     """
-    token = os.environ.get("IBMQ_TOKEN") or os.environ.get("IBM_QUANTUM_TOKEN")
+    downloads = Path(os.environ["USERPROFILE"]) / "Downloads"
+    key_path = downloads / key_filename
     
-    if not token:
-        downloads = Path(os.environ["USERPROFILE"]) / "Downloads"
-        # Prioritize apikey (1) (1).json
-        preferred = downloads / "apikey (1) (1).json"
-        if preferred.exists():
-            try:
-                data = json.loads(preferred.read_text(encoding="utf-8"))
-                token = data.get("apikey") or data.get("token")
-            except Exception:
-                pass
-                
-        if not token:
-            key_files = sorted(downloads.glob("*apikey*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
-            if key_files:
-                try:
-                    data = json.loads(key_files[0].read_text(encoding="utf-8"))
-                    token = data.get("apikey") or data.get("token")
-                except Exception:
-                    pass
-                
-    if token:
-        return QiskitRuntimeService(channel="ibm_quantum_platform", token=token, instance="auto")
-    else:
-        return QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
+    if key_path.exists():
+        try:
+            data = json.loads(key_path.read_text(encoding="utf-8"))
+            token = data.get("apikey") or data.get("token")
+            return QiskitRuntimeService(channel="ibm_quantum_platform", token=token, instance="auto")
+        except Exception:
+            pass
+            
+    return QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
 
-def run_hardware_zeno(backend_name=None, cycles=20, shots=1000):
+def run_hardware_zeno(backend_name="ibm_marrakesh", cycles=10, shots=1000):
     print("=" * 82)
     print("PHYSICAL HARDWARE RUNNER: ACTIVE QUANTUM ZENO ON IBM QPU")
     print("=" * 82)
@@ -62,12 +47,7 @@ def run_hardware_zeno(backend_name=None, cycles=20, shots=1000):
     if backend_name:
         backend = service.backend(backend_name)
     else:
-        # Select least busy backend with dynamic circuit support
-        print("Discovering active QPU with dynamic circuit capabilities...")
-        backends = service.backends(simulator=False, operational=True)
-        # Filter for backends with dynamic circuits
-        dyn_backends = [b for b in backends if "qasm3" in getattr(b.configuration(), "supported_features", []) or True]
-        backend = service.least_busy(dyn_backends)
+        backend = service.backend("ibm_marrakesh")
         
     print(f"Target Hardware Backend: {backend.name} (Qubits: {backend.num_qubits})")
     
@@ -84,8 +64,8 @@ def run_hardware_zeno(backend_name=None, cycles=20, shots=1000):
     
     # 3. Submit SamplerV2 Job
     print(f"Submitting Job to {backend.name} (Shots = {shots})...")
-    sampler = SamplerV2(backend=backend)
-    job = sampler.run([(act_isa,), (pass_isa,)], shots=shots)
+    sampler = SamplerV2(mode=backend)
+    job = sampler.run([act_isa, pass_isa], shots=shots)
     job_id = job.job_id()
     print(f"Job successfully queued! Job ID: {job_id}")
     
@@ -104,8 +84,9 @@ def run_hardware_zeno(backend_name=None, cycles=20, shots=1000):
     return job_id
 
 if __name__ == "__main__":
+    import traceback
     try:
-        run_hardware_zeno(cycles=20, shots=1000)
+        run_hardware_zeno(backend_name="ibm_marrakesh", cycles=10, shots=1000)
     except Exception as e:
         print(f"\nExecution note: {e}")
-        print("Hardware runner ready for execution when QPU credentials/quotas are active.")
+        traceback.print_exc()

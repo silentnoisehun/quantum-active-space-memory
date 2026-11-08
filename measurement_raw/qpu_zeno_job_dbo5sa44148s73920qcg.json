@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-11-08T11:33:57Z",
+  "backend": "ibm_marrakesh",
+  "job_id": "dbo5sa44148s73920qcg",
+  "cycles": 10,
+  "shots": 1000,
+  "status": "QUEUED"
+}
