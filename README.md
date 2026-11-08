@@ -12,7 +12,7 @@
 ## Abstract
 Passive quantum memory in superconducting architectures—defined as unmonitored residual state retention in idle transmon chips across independent executions—was recently shown to be strictly null across a pooled meta-analysis of 1,016 hardware jobs (Fisher $\chi^2 = 24.63$, $p = 0.135$; Stouffer $Z = +0.29$, $p = 0.387$, see `silentnoisehun/quantum-pooled-holdout`). Here we demonstrate that **Active Space Memory**—where the quantum state is continuously coupled to an electromagnetic cavity field via mid-circuit measurement and fast classical feedforward (Quantum Zeno Dynamics)—dynamically stabilizes the transmon state against coherent rotational perturbations and environmental decoherence. 
 
-Executing OpenQASM 3 dynamic circuits on the 156-qubit IBM Quantum Heron processor (`ibm_marrakesh`), we observe an active Z-basis survival probability of **$97.20\% \pm 1.02\text{pp}$** ($95\%\text{ CI}: [95.96\%, 98.08\%]$) over $N=10$ perturbation cycles, compared to **$50.10\% \pm 3.10\text{pp}$** ($95\%\text{ CI}: [47.01\%, 53.19\%]$) in the unmonitored passive control arm. This constitutes a statistically definitive net protection advantage of **$\Delta P_{|1\rangle} = +47.10\text{pp}$** ($95\%\text{ CI}: [43.84\%, 50.36\%]$, two-sample binomial $z = 24.31$, $p < 10^{-15}$).
+Executing OpenQASM 3 dynamic circuits on the 156-qubit IBM Quantum Heron processor (`ibm_marrakesh`), we observe an active Z-basis survival probability of **$97.20\% \pm 1.02\text{pp}$** ($95\%\text{ CI}: [95.96\%, 98.08\%]$) over $N=10$ perturbation cycles, compared to **$50.10\% \pm 3.10\text{pp}$** ($95\%\text{ CI}: [47.01\%, 53.19\%]$) in the unmonitored passive control arm. This constitutes a statistically definitive net protection advantage of **$\Delta P_{|1\rangle} = +47.10\text{pp}$** ($95\%\text{ CI}: [43.84\%, 50.36\%]$, two-sample binomial: unpooled $z = 28.29$, pooled $z = 23.91$, $p < 10^{-15}$).
 
 ---
 
@@ -22,9 +22,9 @@ Executing OpenQASM 3 dynamic circuits on the 156-qubit IBM Quantum Heron process
 Classical information storage operates predominantly as a passive container: physical media retain bit values under zero power input. In superconducting transmon architectures, however, an isolated system is strictly open to thermal and radiative environments, undergoing spontaneous relaxation ($T_1$) and pure dephasing ($T_\phi$). Without continuous active intervention or macroscopic quantum error correction, passive quantum space memory decays monotonically to the thermal ground state.
 
 ### 1.2 Active Space Coupling via Quantum Zeno Dynamics
-By driving the transmon-cavity dispersive interaction $H_{\text{int}} = \hbar \chi (a^\dagger a) \sigma_z$ through mid-circuit projective readout and sub-microsecond FPGA feedforward (`if_else`), we construct an active dynamical attractor:
+By driving the transmon-cavity dispersive interaction $H_{\text{int}} = \hbar \chi (a^\dagger a) \sigma_z$ through mid-circuit projective readout and FPGA feedforward (`if_else`), we construct an active dynamical attractor:
 1. **Zeno Projection:** Frequent mid-circuit measurements along $\sigma_z$ suppress coherent rotations $\Omega \sigma_x$ with a transition probability scaling quadratically as $P_{\text{flip}} \approx (\Omega \tau)^2 \ll 1$.
-2. **Conditional Feedforward:** If a projection error or decay event ($|0\rangle$) is detected, a fast conditional $X$ gate restores the target $|1\rangle$ state within 200–300 ns.
+2. **Conditional Feedforward:** If a projection error or decay event ($|0\rangle$) is detected, the FPGA branch logic evaluates with sub-microsecond latency ($\sim 300\text{ ns}$), triggering a fast conditional $X$ pulse ($\sim 60\text{ ns}$). The closed-loop cycle duration is dominated by dispersive resonator readout integration ($2,684\text{ ns}$), yielding an overall stabilization loop time of $\tau_{\text{loop}} \approx 3.0\ \mu\text{s}$.
 3. **Active Medium:** The quantum state is dynamically sustained through the continuous energy and information exchange between the transmon and the cavity field.
 
 ---
@@ -79,10 +79,10 @@ We report the **Z-basis Target Survival Probability** $P_{|1\rangle} = N_{|1\ran
 | :--- | :---: | :---: | :---: | :--- |
 | **Active Zeno Dynamic Arm** | **97.20%** | **972 / 1,000** | **[95.96%, 98.08%]** | Z-basis pinned in target eigenstate $\|1\rangle$ via active feedforward |
 | **Passive Control Arm** | **50.10%** | **501 / 1,000** | **[47.01%, 53.19%]** | Rotated pure state under unmitigated $R_x(\theta)$ drive ($P_{\|1\rangle} \approx 50.1\%$) |
-| **Net Zeno Advantage ($\Delta P_{|1\rangle}$)** | **+47.10pp** | **+471 shots** | **[+43.84pp, +50.36pp]** | **Confirmed on physical hardware ($z = 24.31$, $p < 10^{-15}$)** |
+| **Net Zeno Advantage ($\Delta P_{|1\rangle}$)** | **+47.10pp** | **+471 shots** | **[+43.84pp, +50.36pp]** | **Confirmed on physical hardware (unpooled $z = 28.29$, pooled $z = 23.91$, $p < 10^{-15}$)** |
 
 > **Note on Readout Error Ceiling and Calibration Drift:**  
-> The nominal backend calibration report at 08:04 UTC indicated an assignment error $p(0|1) = 5.47\%$, which would impose a theoretical static unmitigated detection ceiling of $1 - p(0|1) = 94.53\%$. The unmitigated physical execution of job `dbo63b5t7fqc73akk78g` at 11:57 UTC recorded 972/1,000 raw counts ($97.20\% \pm 1.02\text{pp}$). This $+2.67\text{pp}$ excess over static nominal calibration reflects empirical temporal drift in transmon discriminator thresholds / readout resonator frequency over the ~4 hours between calibration and execution (indicating real-time $p(0|1) \le 2.80\%$ during run), rather than post-hoc error mitigation (all counts reported are unmitigated raw bitstrings).
+> The nominal backend calibration report at 08:04 UTC indicated an assignment error $p(0|1) = 5.47\%$, which would impose a theoretical static unmitigated detection ceiling of $1 - p(0|1) = 94.53\%$. The unmitigated physical execution of job `dbo63b5t7fqc73akk78g` at 11:57 UTC recorded 972/1,000 raw counts ($97.20\% \pm 1.02\text{pp}$). This $+2.67\text{pp}$ excess over static nominal calibration reflects empirical temporal drift in transmon discriminator thresholds / readout resonator frequency over the ~4 hours between calibration and execution (indicating real-time $p(0|1) \le 2.80\%$ during run, inferred from the observed survival under the hypothesis of parameter drift, not directly measured via a contemporaneous isolated $|1\rangle$ calibration circuit), rather than post-hoc error mitigation (all counts reported are unmitigated raw bitstrings).
 
 ---
 
@@ -99,12 +99,12 @@ We report the **Z-basis Target Survival Probability** $P_{|1\rangle} = N_{|1\ran
 | :--- | :---: | :---: | :---: | :--- |
 | **Active Parity Zeno Arm** | **33.60%** | **336 / 1,000** | **[30.74%, 36.59%]** | Parity subspace protected (3x survival vs passive), but below bipartite GME threshold ($F \le 50\%$) |
 | **Passive Control Arm** | **10.90%** | **109 / 1,000** | **[9.12%, 12.98%]** | Rotational dispersion and dephasing below random mixed floor (25%) |
-| **Net Parity Survival Advantage ($\Delta P$)** | **+22.70pp** | **+227 shots** | **[+19.19pp, +26.21pp]** | **Confirmed on physical hardware ($z = 12.68$, $p = 3.8 \times 10^{-37}$)** |
+| **Net Parity Survival Advantage ($\Delta P$)** | **+22.70pp** | **+227 shots** | **[+19.19pp, +26.21pp]** | **Confirmed on physical hardware (unpooled $z = 12.68$, pooled $z = 12.20$, $p = 3.8 \times 10^{-37}$)** |
 
-$$\Delta P_{|\Phi^+\rangle} = P_{\text{active}} - P_{\text{passive}} = +22.70\% \quad (z = 12.68, \ p = 3.8 \times 10^{-37})$$
+$$\Delta P_{|\Phi^+\rangle} = P_{\text{active}} - P_{\text{passive}} = +22.70\% \quad (\text{unpooled } z = 12.68, \ \text{pooled } z = 12.20, \ p = 3.8 \times 10^{-37})$$
 
 > **Academic Arbitration on Bell State Entanglement:**  
-> While the active parity circuit triples parity subspace survival ($33.60\%$ vs $10.90\%$, $+22.70\text{pp}$, $z=12.68$), the state remains $16.40\text{pp}$ below the bipartite entanglement witness threshold ($F > 50.0\%$). The $ZZ$ parity stabilizer protects computational bit-flip parities, but does not protect against phase dephasing. Genuine bipartite entanglement was not preserved.
+> While the active parity circuit triples parity subspace survival ($33.60\%$ vs $10.90\%$, $+22.70\text{pp}$, unpooled $z=12.68$), the state remains $16.40\text{pp}$ below the bipartite entanglement witness threshold ($F > 50.0\%$). The $ZZ$ parity stabilizer protects computational bit-flip parities, but does not protect against phase dephasing. Genuine bipartite entanglement was not preserved.
 
 ---
 
@@ -133,7 +133,9 @@ $$F_{\text{GHZ}} = \frac{P_{000} + P_{111}}{2} + \frac{1}{8} \left( \langle XXX 
 | $\langle YXY \rangle$ Expectation | -0.004 | -0.012 | - | Stabilizer correlation |
 | $\langle YYX \rangle$ Expectation | +0.060 | +0.004 | - | Stabilizer correlation |
 | **Coherence $\text{Re}[\rho_{000, 111}]$** | **-2.63%** | **+11.22%** | **-13.85pp** | **Active Zeno destroys phase coherence via projective dephasing & gate noise** |
-| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62% ± 2.00%** | **24.07% ± 1.94%** | **+12.55% ± 2.79%** | **Population gain outweighs phase loss, but $F \le 50\%$** |
+| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62% [95% CI: ±2.00%]** | **24.07% [95% CI: ±1.94%]** | **+12.55% [95% CI: ±2.79%]** | **Population gain outweighs phase loss; GME not preserved (unpooled $z = 8.83, p = 1.1 \times 10^{-18}$)** |
+
+> *(Note on Statistical Uncertainty: Error margins of $\pm 2.00\%$, $\pm 1.94\%$, and $\pm 2.79\%$ represent 95% Confidence Intervals ($1.96 \times \text{SE}$) propagated from the independent multinomial variances of the 5 tomographic basis measurements.)*
 
 > **Rigorous Scientific Conclusion (GME Falsification & Phase Decoherence Mechanism):**  
 > 1. **Why Passive $\langle XXX \rangle = +0.894$:** The perturbation drive is $R_x(\theta) = \exp(-i \frac{\theta}{2} X)$, which strictly commutes with the Pauli $X$ operator ($[R_x(\theta), X] = 0$). In the passive circuit, the drive mathematically cannot rotate the state out of the $XXX$ eigenspace; $\langle XXX \rangle$ degrades only due to background thermal relaxation across its minimal depth (19 gates).  
