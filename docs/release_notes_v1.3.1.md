@@ -22,7 +22,7 @@ snapshot.
 | **Single-qubit state** | `dbo63b5t7fqc73akk78g` | **97.20%** | 50.10% | **+47.10pp** | unpooled $z = 28.29$, pooled $z = 23.91$, $p < 10^{-15}$ |
 | **Two-qubit Bell parity** | `dbo6lqgou4as73b5jdag` | **33.60%** | 10.90% | **+22.70pp** | unpooled $z = 12.69$, pooled $z = 12.20$, $p = 7.1\times10^{-37}$ (unpooled) |
 | **Three-qubit GHZ population** | `dbo6t18qtr0c73ae383g` | **39.25%** | 12.85% | **+26.40pp** | $>3\times$ vs the 12.5% mixed floor |
-| **Three-qubit GHZ fidelity** | `dbo6t18qtr0c73ae383g` | **36.62% [±2.00%]** | **24.07% [±1.94%]** | **+12.55% [±2.79%]** | unpooled $z = 8.83$, $p = 1.1\times10^{-18}$ |
+| **Three-qubit GHZ fidelity** | `dbo6t18qtr0c73ae383g` | **36.62% [±2.00%]** | **24.07% [±1.94%]** | **+12.55% [±2.79%]** | unpooled $z = 8.83$, two-sided $p = 1.1\times10^{-18}$ |
 
 No scientific conclusion changed: the GME falsification, the Bell-state arbitration and the Zeno
 advantage stand exactly as published.

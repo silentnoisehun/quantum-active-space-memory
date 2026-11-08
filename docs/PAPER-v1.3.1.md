@@ -137,7 +137,7 @@ $$\Delta P_{|\Phi^+\rangle} = P_{\text{active}} - P_{\text{passive}} = +22.70\% 
 
 Re-transpiled locally against the live `ibm_marrakesh` target (Qiskit 2.4.2, `optimization_level=1`, layouts `[0,2,4,1,3]` active / `[0,2,4]` passive):
 
-- **Active Arm:** **26 native CZ gates, 6 mid-circuit measurements (+3 terminal readout), 6 dynamic resets, 6 conditional feedforward branches**. Circuit depth is 59 for the `ZZZ` basis and 61–62 for the four transverse bases. Total mid-circuit readout integration time = $6 \times 2,684\text{ ns} \approx 16.1\ \mu\text{s}$, consuming $46\%$ of transmon dephasing time ($T_2 = 35.05\ \mu\text{s}$).
+- **Active Arm:** **26 native CZ gates, 6 mid-circuit measurements (+3 terminal readout), 6 dynamic resets, 6 conditional feedforward branches**. Circuit depth is 59 for the `ZZZ` basis and 61–62 for the four transverse bases. Total mid-circuit readout integration time = $6 \times 2,684\text{ ns} \approx 16.1\ \mu\text{s}$, consuming 46% of transmon dephasing time ($T_2 = 35.05\ \mu\text{s}$).
 - **Passive Arm:** **8 native CZ gates, 0 mid-circuit measurements (3 terminal readout measurements), 0 dynamic resets, 0 feedforward branches**. Circuit depth is 19 for the `ZZZ` basis and 18–23 for the four transverse bases.
 
 #### Fidelity Formulation
@@ -154,7 +154,7 @@ $$F_{\text{GHZ}} = \frac{P_{000} + P_{111}}{2} + \frac{1}{8} \left( \langle XXX 
 | $\langle YXY \rangle$ Expectation | -0.004 | -0.012 | - | Stabilizer correlation |
 | $\langle YYX \rangle$ Expectation | +0.060 | +0.004 | - | Stabilizer correlation |
 | **Coherence $\text{Re}[\rho_{000, 111}]$** | **-2.63%** | **+11.22%** | **-13.85pp** | **Active Zeno destroys phase coherence via projective dephasing & gate noise** |
-| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62% [95% CI: ±2.00%]** | **24.07% [95% CI: ±1.94%]** | **+12.55% [95% CI: ±2.79%]** | **Population gain outweighs phase loss; GME not preserved (unpooled $z = 8.83, p = 1.1 \times 10^{-18}$)** |
+| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62% [95% CI: ±2.00%]** | **24.07% [95% CI: ±1.94%]** | **+12.55% [95% CI: ±2.79%]** | **Population gain outweighs phase loss; GME not preserved (unpooled $z = 8.83$, two-sided $p = 1.1 \times 10^{-18}$)** |
 
 > *(Note on Statistical Uncertainty: Error margins of $\pm 2.00\%$, $\pm 1.94\%$, and $\pm 2.79\%$ represent 95% Confidence Intervals ($1.96 \times \text{SE}$) propagated from the independent multinomial variances of the 5 tomographic basis measurements.)*
 
