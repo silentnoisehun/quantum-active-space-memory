@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-11-08T12:28:22Z",
+  "experiment": "2_qubit_entangled_bell_state_zeno",
+  "backend": "ibm_marrakesh",
+  "physical_qubits": {
+    "data_q0": 0,
+    "data_q1": 2,
+    "ancilla_a0": 1
+  },
+  "job_id": "dbo6lqgou4as73b5jdag",
+  "cycles": 4,
+  "shots": 1000,
+  "status": "QUEUED"
+}

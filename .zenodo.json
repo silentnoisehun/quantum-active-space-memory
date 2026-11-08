@@ -1,6 +1,6 @@
 {
   "title": "Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors",
-  "description": "Physical experimental hardware confirmation of Active Quantum Space Memory on the 156-qubit IBM Quantum Heron processor (ibm_marrakesh). Demonstrates that while passive quantum memory decays to maximum entropy (50.10% fidelity), active spatial coupling via continuous/mid-circuit measurement and fast classical feedforward pins the quantum state with 97.20% fidelity (net Zeno protection delta +47.10%, p < 10^-15).",
+  "description": "Physical experimental hardware confirmation of Active Quantum Space Memory on the 156-qubit IBM Quantum Heron processor (ibm_marrakesh). Demonstrates that while passive quantum memory decays towards maximum entropy, active spatial coupling via continuous/mid-circuit measurement and fast classical feedforward pins the quantum state across single-qubit states (97.20% vs 50.10%, delta = +47.10%, p < 10^-15), two-qubit entangled Bell states (33.60% vs 10.90%, delta = +22.70%, p = 3.8e-37), and three-qubit GHZ state population stabilization (>3x advantage over uniform mixed floor: 39.25% vs 12.85%). Rigorous tomographic evaluation of Genuine Multipartite Entanglement (GME) witness confirms active fidelity advantage (+12.55pp) while honestly documenting gate-noise phase coherence constraints.",
   "creators": [
     {
       "name": "Róbert, Máté",

@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-11-08T12:43:45Z",
+  "experiment": "3_qubit_ghz_gme_witness_zeno",
+  "backend": "ibm_marrakesh",
+  "physical_qubits": {
+    "data": [
+      0,
+      2,
+      4
+    ],
+    "ancillas": [
+      1,
+      3
+    ]
+  },
+  "job_id": "dbo6t18qtr0c73ae383g",
+  "cycles": 3,
+  "shots_per_pub": 1000,
+  "bases_order": [
+    "act_ZZZ",
+    "pass_ZZZ",
+    "act_XXX",
+    "pass_XXX",
+    "act_XYY",
+    "pass_XYY",
+    "act_YXY",
+    "pass_YXY",
+    "act_YYX",
+    "pass_YYX"
+  ],
+  "status": "QUEUED"
+}

@@ -102,7 +102,36 @@ $$\Delta P_{|\Phi^+\rangle} = P_{\text{active}} - P_{\text{passive}} = +22.70\% 
 
 ---
 
-### 3.3 Simulation Benchmark (Qiskit Aer Thermal Noise)
+### 3.3 Physical 3-Qubit GHZ Genuine Multipartite Entanglement (GME) Witness
+- **Target Backend:** `ibm_marrakesh` (156-qubit Heron r2 processor)
+- **Physical Hardware Job ID:** `dbo6t18qtr0c73ae383g`
+- **Topology:** 5 Physical Qubits in linear chain `Q0 — Q1 — Q2 — Q3 — Q4` (Data: Q0, Q2, Q4 | Ancillas: Q1, Q3)
+- **Target Tripartite State:** $|\text{GHZ}_3\rangle = (|000\rangle + |111\rangle)/\sqrt{2}$
+- **Active Mechanism:** Interleaved non-destructive parity stabilizers $S_1 = Z_0 Z_1$ and $S_2 = Z_1 Z_2$ via ancillas + FPGA feedforward
+- **Tomographic Protocol:** 5 Pauli bases ($ZZZ$, $XXX$, $XYY$, $YXY$, $YYX$) across 10 circuits
+- **Total Physical Shots:** **10,000 shots** (1,000 shots / basis / arm, Execution Date: 2026-11-08)
+
+#### Fidelity Formulation:
+$$F_{\text{GHZ}} = \frac{P_{000} + P_{111}}{2} + \frac{1}{8} \left( \langle XXX \rangle - \langle XYY \rangle - \langle YXY \rangle - \langle YYX \rangle \right)$$
+
+| Component / Metric | Active Zeno Arm | Passive Control Arm | Net Zeno Advantage ($\Delta$) | Physical Interpretation |
+| :--- | :---: | :---: | :---: | :--- |
+| **$P_{000}$ (Z-basis)** | **51.20%** | 13.80% | +37.40pp | Ground state subspace pinned |
+| **$P_{111}$ (Z-basis)** | **27.30%** | 11.90% | +15.40pp | Excited subspace pinned |
+| **Population $(P_{000}+P_{111})/2$** | **39.25%** | **12.85%** | **+26.40pp** | **>3x population retention vs random mixed floor (12.5%)** |
+| $\langle XXX \rangle$ Expectation | -0.050 | +0.894 | - | Phase rotation under $R_x$ drive |
+| $\langle XYY \rangle$ Expectation | +0.104 | +0.004 | - | Stabilizer correlation |
+| $\langle YXY \rangle$ Expectation | -0.004 | -0.012 | - | Stabilizer correlation |
+| $\langle YYX \rangle$ Expectation | +0.060 | +0.004 | - | Stabilizer correlation |
+| **Coherence $\text{Re}[\rho_{000, 111}]$** | **-2.63%** | **+11.22%** | - | Phase coherence degraded by 34 CZ gates |
+| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62%** | **24.07%** | **+12.55pp** | **Active Zeno advantage confirmed ($\Delta F = +12.55\%$)** |
+
+> **Rigorous Academic Arbitration (GME Limit):**  
+> While Active Zeno dynamics demonstrated massive population stabilization ($39.25\%$ active vs $12.85\%$ passive, where $12.5\%$ is the random uniform 8-state mixed floor), the final active fidelity **$F_{\text{active}} = 36.62\% \le 50.0\%$**. Under formal entanglement witness criteria, **Genuine Multipartite Entanglement ($F > 50\%$) was not preserved**, as the off-diagonal coherence ($\text{Re}[\rho] = -2.63\%$) was eroded by the physical noise of 34 native CZ gates and mid-circuit readout operations on the Heron processor.
+
+---
+
+### 3.4 Simulation Benchmark (Qiskit Aer Thermal Noise)
 Under realistic transmon thermal noise ($T_1 = 80\ \mu\text{s}$, $T_2 = 100\ \mu\text{s}$, gate time $= 30\text{ ns}$, readout time $= 800\text{ ns}$):
 
 | Cycles ($N$) | Passive Control $P_{|1\rangle}$ | Active Zeno $P_{|1\rangle}$ | Net Delta ($\Delta P_{|1\rangle}$) |
@@ -117,9 +146,9 @@ Under realistic transmon thermal noise ($T_1 = 80\ \mu\text{s}$, $T_2 = 100\ \mu
 ---
 
 ## 4. Limitations and Future Work
-1. **Multi-Qubit Scaling:** While single-qubit state preservation and 2-qubit entangled Bell-state protection have both been demonstrated on physical hardware (`ibm_marrakesh`), scaling to $N \ge 3$ GHZ states and 2D surface-code tiles remains to be evaluated.
-2. **Metric Scope:** We measure computational Z-basis retention probability $P_{|1\rangle}$ and Bell-basis parity survival probability $P_{|\Phi^+\rangle}$. Full two-qubit quantum state tomography (16 Pauli expectations) is planned for comprehensive density matrix reconstruction.
-3. **Temporal Scope:** Physical hardware trials evaluated $N=10$ single-qubit and $N=4$ multi-qubit dynamic cycles. Extended testing up to $N=100$ cycles will probe the asymptotic equilibrium fidelity limit imposed by two-qubit CZ gate errors and FPGA latency.
+1. **Multi-Qubit Scaling:** Single-qubit state preservation ($\Delta = +47.10\text{pp}$), 2-qubit entangled Bell-state parity protection ($\Delta = +22.70\text{pp}$), and 3-qubit GHZ state population stabilization ($>3\times$ advantage over passive decay) have all been demonstrated on physical hardware (`ibm_marrakesh`). Scaling to 2D topological surface-code tiles and higher-order stabilizer lattices remains the next development milestone.
+2. **Metric Scope:** We measure computational Z-basis retention probability $P_{|1\rangle}$, Bell-basis parity survival probability $P_{|\Phi^+\rangle}$, and 5-basis GME witness operators for tripartite GHZ states. Full multi-qubit state tomography and randomized benchmarking across varying cycle depths ($N \in [5, 100]$) are planned to further quantify phase coherence degradation mechanisms.
+3. **Temporal Scope:** Physical hardware trials evaluated $N=10$ single-qubit, $N=4$ two-qubit Bell, and $N=3$ three-qubit GHZ dynamic cycles. Extended testing up to $N=100$ cycles will probe the asymptotic equilibrium fidelity limit imposed by two-qubit CZ gate errors and FPGA latency.
 
 ---
 
@@ -142,7 +171,7 @@ Under realistic transmon thermal noise ($T_1 = 80\ \mu\text{s}$, $T_2 = 100\ \mu
   month        = nov,
   year         = 2026,
   publisher    = {Zenodo / GitHub},
-  version      = {v1.1.0},
+  version      = {v1.3.0},
   url          = {https://github.com/silentnoisehun/quantum-active-space-memory}
 }
 ```

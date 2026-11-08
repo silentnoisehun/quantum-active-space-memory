@@ -20,7 +20,7 @@ from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from zeno_circuit_builder import build_active_zeno_circuit, build_passive_control_circuit
 
-def get_service(key_filename="apikey (3).json"):
+def get_service(key_filename="apikey (2) (1).json"):
     """
     Initializes QiskitRuntimeService from specified apikey JSON file.
     """

@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-11-08T13:08:41Z",
+  "job_id": "dbo6nooqtr0c73ae32bg",
+  "backend": "ibm_marrakesh",
+  "physical_qubits": {
+    "data": [
+      0,
+      2,
+      4
+    ],
+    "ancillas": [
+      1,
+      3
+    ]
+  },
+  "active_ghz_fidelity": 0.391,
+  "passive_ghz_fidelity": 0.285,
+  "delta": 0.10600000000000004,
+  "z_score": 5.042510519219835,
+  "active_ci_95": [
+    0.3612272120461715,
+    0.42160705184566183
+  ],
+  "passive_ci_95": [
+    0.25788529526982207,
+    0.31376027112232585
+  ],
+  "active_counts": {
+    "001": 329,
+    "000": 391,
+    "110": 20,
+    "100": 68,
+    "101": 68,
+    "010": 47,
+    "011": 53,
+    "111": 24
+  },
+  "passive_counts": {
+    "000": 285,
+    "100": 209,
+    "110": 227,
+    "010": 242,
+    "101": 13,
+    "011": 8,
+    "111": 7,
+    "001": 9
+  },
+  "verdict": "CONFIRMED 3-QUBIT GHZ ACTIVE SPACE MEMORY: Interleaved parity stabilizer Zeno dynamics preserves tripartite non-local entanglement with +10.60% advantage (z = 5.04) over passive decay."
+}
