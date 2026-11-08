@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-08T11:26:41Z",
+  "results": [
+    {
+      "cycles": 5,
+      "active_fidelity": 0.99,
+      "passive_fidelity": 0.1515,
+      "fidelity_delta": 0.8385,
+      "shots": 2000
+    },
+    {
+      "cycles": 10,
+      "active_fidelity": 0.9935,
+      "passive_fidelity": 0.497,
+      "fidelity_delta": 0.49650000000000005,
+      "shots": 2000
+    },
+    {
+      "cycles": 20,
+      "active_fidelity": 0.989,
+      "passive_fidelity": 0.0065,
+      "fidelity_delta": 0.9825,
+      "shots": 2000
+    },
+    {
+      "cycles": 30,
+      "active_fidelity": 0.9895,
+      "passive_fidelity": 0.497,
+      "fidelity_delta": 0.49250000000000005,
+      "shots": 2000
+    }
+  ],
+  "verdict": "PASSED: Active Zeno Dynamic Circuits successfully preserve |1> state against perturbation."
+}
