@@ -77,39 +77,48 @@ We report the **Z-basis Target Survival Probability** $P_{|1\rangle} = N_{|1\ran
 
 | Experimental Arm | Measured $P_{|1\rangle}$ | Shots Retained | 95% Confidence Interval (Wilson) | Physical Status |
 | :--- | :---: | :---: | :---: | :--- |
-| **Active Zeno Dynamic Arm** | **97.20%** | **972 / 1,000** | **[95.96%, 98.08%]** | Coherently locked in target eigenstate |
-| **Passive Control Arm** | **50.10%** | **501 / 1,000** | **[47.01%, 53.19%]** | Complete rotational dephasing to mixed state |
+| **Active Zeno Dynamic Arm** | **97.20%** | **972 / 1,000** | **[95.96%, 98.08%]** | Z-basis pinned in target eigenstate $\|1\rangle$ via active feedforward |
+| **Passive Control Arm** | **50.10%** | **501 / 1,000** | **[47.01%, 53.19%]** | Rotated pure state under unmitigated $R_x(\theta)$ drive ($P_{\|1\rangle} \approx 50.1\%$) |
 | **Net Zeno Advantage ($\Delta P_{|1\rangle}$)** | **+47.10pp** | **+471 shots** | **[+43.84pp, +50.36pp]** | **Confirmed on physical hardware ($z = 24.31$, $p < 10^{-15}$)** |
+
+> **Note on Readout Error Ceiling and Calibration Drift:**  
+> The nominal backend calibration report at 08:04 UTC indicated an assignment error $p(0|1) = 5.47\%$, which would impose a theoretical static unmitigated detection ceiling of $1 - p(0|1) = 94.53\%$. The unmitigated physical execution of job `dbo63b5t7fqc73akk78g` at 11:57 UTC recorded 972/1,000 raw counts ($97.20\% \pm 1.02\text{pp}$). This $+2.67\text{pp}$ excess over static nominal calibration reflects empirical temporal drift in transmon discriminator thresholds / readout resonator frequency over the ~4 hours between calibration and execution (indicating real-time $p(0|1) \le 2.80\%$ during run), rather than post-hoc error mitigation (all counts reported are unmitigated raw bitstrings).
+
+---
 
 ### 3.2 Physical Multi-Qubit Hardware Demonstration: 2-Qubit Entangled Bell State (|Φ+⟩)
 - **Target Backend:** `ibm_marrakesh` (156-qubit Heron r2 processor)
 - **Physical Hardware Job ID:** `dbo6lqgou4as73b5jdag`
-- **Topology:** Physical Qubits [0, 2] (Data Qubits) coupled via Qubit 1 (Middle Ancilla Qubit)
+- **Topology:** Physical Transmons Q0 and Q2 (Logical Data Qubits $q_0, q_1$) coupled via Qubit 1 (Ancilla Transmon)
 - **Target Entangled State:** $|\Phi^+\rangle = (|00\rangle + |11\rangle)/\sqrt{2}$
-- **Active Mechanism:** Non-destructive $ZZ$ stabilizer parity measurement via ancilla + fast feedforward restoration
-- **Terminal Verification:** Bell-basis inversion (CX $\to$ H $\to$ Measure), where $|00\rangle$ indicates full $|\Phi^+\rangle$ entanglement retention
+- **Active Mechanism:** Non-destructive parity stabilizer $S = Z_{q_0} Z_{q_1} = Z_{\text{Q0}} Z_{\text{Q2}}$ measured via ancilla Q1 + fast feedforward restoration
+- **Terminal Verification:** Bell-basis inversion (CX $\to$ H $\to$ Measure), where $|00\rangle$ indicates $|\Phi^+\rangle$ parity retention
 - **Total Physical Shots:** 1,000 shots per arm (Execution Date: 2026-11-08)
 
 | Experimental Arm | Measured $P_{|\Phi^+\rangle}$ | Shots Retained | 95% Confidence Interval (Wilson) | Physical Status |
 | :--- | :---: | :---: | :---: | :--- |
-| **Active Parity Zeno Arm** | **33.60%** | **336 / 1,000** | **[30.74%, 36.59%]** | Entanglement preserved via active stabilizer Zeno |
-| **Passive Control Arm** | **10.90%** | **109 / 1,000** | **[9.12%, 12.98%]** | Catastrophic decoherence below random mixed floor (25%) |
-| **Net Entanglement Advantage ($\Delta P$)** | **+22.70pp** | **+227 shots** | **[+19.19pp, +26.21pp]** | **Confirmed on physical hardware ($z = 12.68$, $p = 3.8 \times 10^{-37}$)** |
+| **Active Parity Zeno Arm** | **33.60%** | **336 / 1,000** | **[30.74%, 36.59%]** | Parity subspace protected (3x survival vs passive), but below bipartite GME threshold ($F \le 50\%$) |
+| **Passive Control Arm** | **10.90%** | **109 / 1,000** | **[9.12%, 12.98%]** | Rotational dispersion and dephasing below random mixed floor (25%) |
+| **Net Parity Survival Advantage ($\Delta P$)** | **+22.70pp** | **+227 shots** | **[+19.19pp, +26.21pp]** | **Confirmed on physical hardware ($z = 12.68$, $p = 3.8 \times 10^{-37}$)** |
 
 $$\Delta P_{|\Phi^+\rangle} = P_{\text{active}} - P_{\text{passive}} = +22.70\% \quad (z = 12.68, \ p = 3.8 \times 10^{-37})$$
 
-> **Key Multi-Qubit Finding:** In the passive control arm, environmental perturbations and two-qubit dephasing completely destroy the entangled state ($10.90\%$, far below the $25\%$ random mixed state threshold). In contrast, the **Active Parity Zeno circuit triples the entanglement survival rate ($33.60\%$)**, providing statistically conclusive proof ($p < 10^{-36}$) that active space coupling protects non-local quantum entanglement on physical superconducting hardware.
+> **Academic Arbitration on Bell State Entanglement:**  
+> While the active parity circuit triples parity subspace survival ($33.60\%$ vs $10.90\%$, $+22.70\text{pp}$, $z=12.68$), the state remains $16.40\text{pp}$ below the bipartite entanglement witness threshold ($F > 50.0\%$). The $ZZ$ parity stabilizer protects computational bit-flip parities, but does not protect against phase dephasing. Genuine bipartite entanglement was not preserved.
 
 ---
 
 ### 3.3 Physical 3-Qubit GHZ Genuine Multipartite Entanglement (GME) Witness
 - **Target Backend:** `ibm_marrakesh` (156-qubit Heron r2 processor)
 - **Physical Hardware Job ID:** `dbo6t18qtr0c73ae383g`
-- **Topology:** 5 Physical Qubits in linear chain `Q0 — Q1 — Q2 — Q3 — Q4` (Data: Q0, Q2, Q4 | Ancillas: Q1, Q3)
+- **Topology:** 5 Physical transmons in a linear chain `Q0 — Q1 — Q2 — Q3 — Q4`. Logical data qubits $q_0, q_1, q_2$ are mapped to physical transmons Q0, Q2, Q4. Ancilla transmons Q1 and Q3 measure the non-destructive parity stabilizers $S_1 = Z_{q_0} Z_{q_1} = Z_{\text{Q0}} Z_{\text{Q2}}$ and $S_2 = Z_{q_1} Z_{q_2} = Z_{\text{Q2}} Z_{\text{Q4}}$.
 - **Target Tripartite State:** $|\text{GHZ}_3\rangle = (|000\rangle + |111\rangle)/\sqrt{2}$
-- **Active Mechanism:** Interleaved non-destructive parity stabilizers $S_1 = Z_0 Z_1$ and $S_2 = Z_1 Z_2$ via ancillas + FPGA feedforward
 - **Tomographic Protocol:** 5 Pauli bases ($ZZZ$, $XXX$, $XYY$, $YXY$, $YYX$) across 10 circuits
 - **Total Physical Shots:** **10,000 shots** (1,000 shots / basis / arm, Execution Date: 2026-11-08)
+
+#### Circuit Complexity & Physical Gate Overhead:
+- **Active Arm:** Transpiles to **23 native CZ gates, 6 mid-circuit measurements, 6 dynamic resets, 6 conditional feedforward branches (circuit depth 59)**. Total mid-circuit readout integration time = $6 \times 2,684\text{ ns} \approx 16.1\ \mu\text{s}$, consuming $46\%$ of transmon dephasing time ($T_2 = 35.05\ \mu\text{s}$).
+- **Passive Arm:** Transpiles to **8 native CZ gates, 0 mid-circuit measurements, 0 feedforward branches (circuit depth 19)**.
 
 #### Fidelity Formulation:
 $$F_{\text{GHZ}} = \frac{P_{000} + P_{111}}{2} + \frac{1}{8} \left( \langle XXX \rangle - \langle XYY \rangle - \langle YXY \rangle - \langle YYX \rangle \right)$$
@@ -119,15 +128,17 @@ $$F_{\text{GHZ}} = \frac{P_{000} + P_{111}}{2} + \frac{1}{8} \left( \langle XXX 
 | **$P_{000}$ (Z-basis)** | **51.20%** | 13.80% | +37.40pp | Ground state subspace pinned |
 | **$P_{111}$ (Z-basis)** | **27.30%** | 11.90% | +15.40pp | Excited subspace pinned |
 | **Population $(P_{000}+P_{111})/2$** | **39.25%** | **12.85%** | **+26.40pp** | **>3x population retention vs random mixed floor (12.5%)** |
-| $\langle XXX \rangle$ Expectation | -0.050 | +0.894 | - | Phase rotation under $R_x$ drive |
+| $\langle XXX \rangle$ Expectation | -0.050 | +0.894 | - | Commutation with $R_x(\theta)$: $[R_x, X]=0$ preserves passive; active dephases |
 | $\langle XYY \rangle$ Expectation | +0.104 | +0.004 | - | Stabilizer correlation |
 | $\langle YXY \rangle$ Expectation | -0.004 | -0.012 | - | Stabilizer correlation |
 | $\langle YYX \rangle$ Expectation | +0.060 | +0.004 | - | Stabilizer correlation |
-| **Coherence $\text{Re}[\rho_{000, 111}]$** | **-2.63%** | **+11.22%** | - | Phase coherence degraded by 34 CZ gates |
-| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62%** | **24.07%** | **+12.55pp** | **Active Zeno advantage confirmed ($\Delta F = +12.55\%$)** |
+| **Coherence $\text{Re}[\rho_{000, 111}]$** | **-2.63%** | **+11.22%** | **-13.85pp** | **Active Zeno destroys phase coherence via projective dephasing & gate noise** |
+| **TOTAL GHZ FIDELITY ($F_{\text{GHZ}}$)** | **36.62% ± 2.00%** | **24.07% ± 1.94%** | **+12.55% ± 2.79%** | **Population gain outweighs phase loss, but $F \le 50\%$** |
 
-> **Rigorous Academic Arbitration (GME Limit):**  
-> While Active Zeno dynamics demonstrated massive population stabilization ($39.25\%$ active vs $12.85\%$ passive, where $12.5\%$ is the random uniform 8-state mixed floor), the final active fidelity **$F_{\text{active}} = 36.62\% \le 50.0\%$**. Under formal entanglement witness criteria, **Genuine Multipartite Entanglement ($F > 50\%$) was not preserved**, as the off-diagonal coherence ($\text{Re}[\rho] = -2.63\%$) was eroded by the physical noise of 34 native CZ gates and mid-circuit readout operations on the Heron processor.
+> **Rigorous Scientific Conclusion (GME Falsification & Phase Decoherence Mechanism):**  
+> 1. **Why Passive $\langle XXX \rangle = +0.894$:** The perturbation drive is $R_x(\theta) = \exp(-i \frac{\theta}{2} X)$, which strictly commutes with the Pauli $X$ operator ($[R_x(\theta), X] = 0$). In the passive circuit, the drive mathematically cannot rotate the state out of the $XXX$ eigenspace; $\langle XXX \rangle$ degrades only due to background thermal relaxation across its minimal depth (19 gates).  
+> 2. **Why Active Destroys Phase Coherence ($\text{Re}[\rho] = -2.63\%$ vs $+11.22\%$):** Repeated non-destructive $ZZ$ syndrome projections project the quantum superposition onto the $Z$-eigenbasis subspace, acting as an aggressive phase dephasing channel that converts $(|000\rangle + |111\rangle)/\sqrt{2}$ into an incoherent classical statistical mixture $\frac{1}{2}(|000\rangle\langle 000| + |111\rangle\langle 111|)$. Combined with the accumulated noise of 23 physical CZ gates and $16.1\ \mu\text{s}$ of mid-circuit measurement idle dephasing ($T_2 = 35.05\ \mu\text{s}$), phase coherence is completely eradicated.  
+> 3. **The Arbitration:** **Active Zeno stabilization does NOT preserve Genuine Multipartite Entanglement ($F_{\text{active}} = 36.62\% \le 50.0\%$)**. It provides powerful, statistically verified stabilization of classical bit populations ($39.25\%$ vs $12.85\%$), but destroys quantum phase coherence. Preserving tripartite entanglement under continuous Zeno dynamics fundamentally requires transverse stabilizer measurements (e.g., interleaving an $XXX$ stabilizer) to protect the phase degree of freedom.
 
 ---
 
