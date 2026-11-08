@@ -1,7 +1,11 @@
 # Quantum Active Space Memory (QPU Zeno Dynamics)
 
-**Author:** Máté Róbert (ORCID: 0009-0003-3986-6039)  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.quantum-active-space-memory.svg)](https://zenodo.org/badge/latestdoi/silentnoisehun/quantum-active-space-memory)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Author:** Máté Róbert (ORCID: [0009-0003-3986-6039](https://orcid.org/0009-0003-3986-6039))  
 **Repository:** https://github.com/silentnoisehun/quantum-active-space-memory  
+**Hardware Verification:** `ibm_marrakesh` (156-qubit Heron r2, Job `dbo63b5t7fqc73akk78g`)  
 
 ---
 
@@ -89,3 +93,19 @@ $$\Delta F = F_{\text{active}} - F_{\text{passive}} = +47.10\% \quad (p < 10^{-1
 - `scripts/qpu_hardware_runner.py`: Submits SamplerV2 jobs to physical IBM Quantum backends (e.g., `ibm_marrakesh`).
 - `scripts/wait_and_extract_results.py`: Real-time monitoring and physical metric extractor for QPU runs.
 - `measurement_raw/`: Raw JSON logs and job execution manifests.
+
+---
+
+## Citation
+
+```bibtex
+@software{robert2026active_space_memory,
+  author       = {Róbert, Máté},
+  title        = {Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors},
+  month        = nov,
+  year         = 2026,
+  publisher    = {Zenodo / GitHub},
+  version      = {v1.0.0},
+  url          = {https://github.com/silentnoisehun/quantum-active-space-memory}
+}
+```

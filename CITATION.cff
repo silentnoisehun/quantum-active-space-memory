@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this research, code, or experimental hardware data, please cite it as below."
+authors:
+  - family-names: "Róbert"
+    given-names: "Máté"
+    orcid: "https://orcid.org/0009-0003-3986-6039"
+title: "Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors"
+version: 1.0.0
+date-released: 2026-11-08
+repository-code: "https://github.com/silentnoisehun/quantum-active-space-memory"
+license: "MIT"
+keywords:
+  - "quantum computing"
+  - "quantum zeno effect"
+  - "quantum memory"
+  - "dynamic circuits"
+  - "superconducting qubits"
+  - "transmon"
+  - "ibm quantum"

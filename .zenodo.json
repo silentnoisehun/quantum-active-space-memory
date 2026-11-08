@@ -1,0 +1,21 @@
+{
+  "title": "Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors",
+  "description": "Physical experimental hardware confirmation of Active Quantum Space Memory on the 156-qubit IBM Quantum Heron processor (ibm_marrakesh). Demonstrates that while passive quantum memory decays to maximum entropy (50.10% fidelity), active spatial coupling via continuous/mid-circuit measurement and fast classical feedforward pins the quantum state with 97.20% fidelity (net Zeno protection delta +47.10%, p < 10^-15).",
+  "creators": [
+    {
+      "name": "Róbert, Máté",
+      "orcid": "0009-0003-3986-6039"
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": [
+    "Quantum Computing",
+    "Quantum Zeno Dynamics",
+    "Active Space Memory",
+    "Dynamic Circuits",
+    "Superconducting Transmon",
+    "IBM Quantum"
+  ],
+  "upload_type": "software"
+}
