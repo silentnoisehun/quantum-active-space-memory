@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Active Space Memory — Active Quantum Zeno Dynamics on IBM Quantum Heron (v1.3.1)</title>
+<style>
+  :root{
+    --ink:#14171c;
+    --ink-soft:#4a5261;
+    --line:#dfe4ec;
+    --line-soft:#eef1f6;
+    --accent:#0f62fe;
+    --accent-deep:#0b3ea8;
+    --ok:#0f7b3d;
+    --warn:#b3541e;
+    --paper:#ffffff;
+    --tint:#f6f8fc;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @page{ size:A4; margin:18mm 16mm; }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:#eceff4; color:var(--ink);
+    font-family:var(--sans); font-size:15.5px; line-height:1.62;
+  }
+  .page{
+    max-width:960px; margin:28px auto 60px; background:var(--paper);
+    padding:56px 64px 72px; border-radius:6px;
+    box-shadow:0 1px 3px rgba(16,24,40,.08),0 14px 40px rgba(16,24,40,.07);
+  }
+  header.title{ text-align:center; padding-bottom:26px; border-bottom:3px solid var(--ink); }
+  h1{ font-family:var(--serif); font-size:30px; line-height:1.24; margin:0 0 18px; letter-spacing:-.01em; }
+  h1 .sub{ display:block; font-size:19px; font-weight:400; color:var(--ink-soft); margin-top:8px; }
+  .badges{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:14px 0 18px; }
+  .badge{
+    font-size:11.5px; letter-spacing:.02em; padding:4px 10px; border-radius:999px;
+    border:1px solid var(--line); background:var(--tint); color:var(--ink-soft);
+  }
+  .badge.accent{ border-color:#bcd3ff; background:#eaf1ff; color:var(--accent-deep); font-weight:600; }
+  .meta{ display:grid; grid-template-columns:auto 1fr; gap:6px 18px; text-align:left; max-width:640px; margin:0 auto; font-size:13.5px; }
+  .meta dt{ color:var(--ink-soft); font-weight:600; }
+  .meta dd{ margin:0; }
+  .meta a{ color:var(--accent); text-decoration:none; border-bottom:1px solid #cfe0ff; }
+  .meta a:hover{ border-bottom-color:var(--accent); }
+  code{ font-family:var(--mono); font-size:.88em; background:var(--tint); padding:1px 5px; border-radius:4px; }
+  h2{
+    font-family:var(--serif); font-size:21px; margin:42px 0 14px; padding-bottom:7px;
+    border-bottom:1px solid var(--line); letter-spacing:-.005em;
+  }
+  h3{ font-size:16.5px; margin:30px 0 10px; color:var(--accent-deep); }
+  h4{ font-size:14.5px; margin:22px 0 8px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; }
+  p{ margin:0 0 14px; }
+  ul,ol{ margin:0 0 16px; padding-left:24px; }
+  li{ margin:5px 0; }
+  .abstract{
+    background:linear-gradient(180deg,#f7faff,#eef3fd); border:1px solid #d5e2fb;
+    border-left:4px solid var(--accent); border-radius:6px; padding:20px 24px; margin:26px 0 8px;
+  }
+  .abstract h2{ margin:0 0 12px; border:0; padding:0; font-size:13px; text-transform:uppercase;
+    letter-spacing:.12em; color:var(--accent-deep); font-family:var(--sans); }
+  .abstract p:last-child{ margin-bottom:0; }
+  .callout{
+    background:var(--tint); border-left:4px solid var(--accent); border-radius:0 6px 6px 0;
+    padding:14px 18px; margin:18px 0; font-size:14.5px;
+  }
+  .callout.gold{ border-left-color:#d99a1b; background:#fdf8ee; }
+  .callout.green{ border-left-color:var(--ok); background:#f1f9f4; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout .lead{ display:block; font-weight:700; margin-bottom:6px; }
+  figure.diagram{
+    margin:22px 0; padding:16px 14px; background:#fbfcfe; border:1px solid var(--line);
+    border-radius:6px; overflow-x:auto;
+  }
+  figure.diagram pre{ margin:0; font-family:var(--mono); font-size:12px; line-height:1.35; color:#2b3340; }
+  table{
+    width:100%; border-collapse:collapse; margin:18px 0 10px; font-size:13.6px;
+    border:1px solid var(--line); border-radius:6px; overflow:hidden;
+  }
+  caption{ caption-side:top; text-align:left; font-size:12.5px; color:var(--ink-soft); padding:0 0 8px; }
+  thead th{
+    background:#eef2f8; text-align:left; font-weight:700; font-size:12.3px;
+    text-transform:uppercase; letter-spacing:.045em; color:#38414f;
+    padding:10px 12px; border-bottom:2px solid #ccd6e4; white-space:nowrap;
+  }
+  tbody td{ padding:9px 12px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:0; }
+  tbody tr:nth-child(even){ background:#fafbfe; }
+  tbody tr.hi{ background:#eef4ff; }
+  tbody tr.hi td{ border-bottom-color:#dbe6fb; }
+  td.num, th.num{ text-align:right; font-variant-numeric:tabular-nums; font-family:var(--mono); font-size:12.8px; }
+  td.mid, th.mid{ text-align:center; }
+  .eq{
+    background:var(--tint); border:1px solid var(--line); border-radius:6px;
+    padding:14px 18px; margin:16px 0; font-family:var(--serif); font-size:16px; text-align:center;
+  }
+  .ok{ color:var(--ok); font-weight:700; }
+  .bad{ color:var(--warn); font-weight:700; }
+  .small{ font-size:12.8px; color:var(--ink-soft); }
+  .legend{ font-size:12.5px; color:var(--ink-soft); margin:2px 0 22px; }
+  pre.bib{
+    background:#0f1420; color:#dbe4f0; padding:16px 18px; border-radius:6px; overflow-x:auto;
+    font-family:var(--mono); font-size:12.6px; line-height:1.5;
+  }
+  pre.bib .k{ color:#7fb2ff; }
+  footer{
+    margin-top:46px; padding-top:18px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12.6px; color:var(--ink-soft);
+  }
+  @media (max-width:760px){
+    .page{ padding:28px 20px 40px; margin:0; border-radius:0; }
+    h1{ font-size:23px; }
+    .meta{ grid-template-columns:1fr; gap:2px 0; }
+    .meta dt{ margin-top:8px; }
+  }
+  @media print{
+    body{ background:#fff; font-size:10.4pt; }
+    .page{ box-shadow:none; margin:0; max-width:none; padding:0; border-radius:0; }
+    h2{ page-break-after:avoid; margin-top:22pt; }
+    h3,h4{ page-break-after:avoid; }
+    table,figure.diagram,.callout,.abstract{ page-break-inside:avoid; }
+    a{ color:inherit; text-decoration:none; }
+    .badges .badge{ border-color:#999; }
+  }
+</style>
+</head>
+<body>
+<article class="page">
+
+<header class="title">
+  <h1>Quantum Active Space Memory
+    <span class="sub">Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors</span>
+  </h1>
+  <div class="badges">
+    <span class="badge accent">v1.3.1 · verified release</span>
+    <span class="badge">MIT License</span>
+    <span class="badge">Open hardware · 1,000–10,000 physical shots per arm</span>
+    <span class="badge">60/60 statistics re-derived</span>
+  </div>
+  <dl class="meta">
+    <dt>Author</dt><dd>Máté Róbert · <a href="https://orcid.org/0009-0003-3986-6039">ORCID 0009-0003-3986-6039</a></dd>
+    <dt>Repository</dt><dd><a href="https://github.com/silentnoisehun/quantum-active-space-memory">github.com/silentnoisehun/quantum-active-space-memory</a></dd>
+    <dt>Hardware</dt><dd><code>ibm_marrakesh</code> — 156-qubit Heron r2 · Job <code>dbo63b5t7fqc73akk78g</code> · Physical Qubit 0 · 2026-11-08</dd>
+    <dt>Raw data</dt><dd><code>measurement_raw/*.json</code> (committed, unmodified)</dd>
+    <dt>Verification</dt><dd><code>python scripts/verify_paper_statistics.py</code></dd>
+  </dl>
+</header>
+
+<section class="abstract">
+  <h2>Abstract</h2>
+  <p>Passive quantum memory in superconducting architectures—defined as unmonitored residual state retention in idle transmon chips across independent executions—was recently shown to be strictly null across a pooled meta-analysis of 1,016 hardware jobs (Fisher χ² = 24.63, p = 0.135; Stouffer Z = +0.29, p = 0.387; see <code>silentnoisehun/quantum-pooled-holdout</code>). Here we demonstrate that <b>Active Space Memory</b>—where the quantum state is continuously coupled to an electromagnetic cavity field via mid-circuit measurement and fast classical feedforward (Quantum Zeno Dynamics)—dynamically stabilizes the transmon state against coherent rotational perturbations and environmental decoherence.</p>
+  <p>Executing OpenQASM 3 dynamic circuits on the 156-qubit IBM Quantum Heron processor (<code>ibm_marrakesh</code>), we observe an active Z-basis survival probability of <b>97.20% ± 1.04 pp</b> (95% CI: [95.98%, 98.06%]) over N = 10 perturbation cycles, compared to <b>50.10% ± 3.09 pp</b> (95% CI: [47.01%, 53.19%]) in the unmonitored passive control arm. This constitutes a statistically definitive net protection advantage of <b>ΔP|1⟩ = +47.10 pp</b> (95% CI: [43.84 pp, 50.36 pp], two-sample binomial: unpooled z = 28.29, pooled z = 23.91, two-sided p &lt; 10⁻¹⁵).</p>
+</section>
+
+<h2>1 · Physical Model &amp; Paradigm Shift</h2>
+
+<h3>1.1 · The Limits of Passive Quantum Storage</h3>
+<p>Classical information storage operates predominantly as a passive container: physical media retain bit values under zero power input. In superconducting transmon architectures, however, an isolated system is strictly open to thermal and radiative environments, undergoing spontaneous relaxation (T₁) and pure dephasing (T<sub>φ</sub>). Without continuous active intervention or macroscopic quantum error correction, passive quantum space storage decays monotonically to the thermal ground state.</p>
+
+<h3>1.2 · Active Space Coupling via Quantum Zeno Dynamics</h3>
+<p>By driving the transmon-cavity dispersive interaction H<sub>int</sub> = ℏχ(a†a)σ<sub>z</sub> through mid-circuit projective readout and FPGA feedforward (<code>if_else</code>), we construct an active dynamical attractor:</p>
+<ol>
+  <li><b>Zeno Projection:</b> Frequent mid-circuit measurements along σ<sub>z</sub> suppress coherent rotations Ωσ<sub>x</sub> with a transition probability scaling quadratically as P<sub>flip</sub> ≈ (Ωτ)² ≪ 1.</li>
+  <li><b>Conditional Feedforward:</b> If a projection error or decay event (|0⟩) is detected, the FPGA branch logic evaluates with sub-microsecond latency (~300 ns), triggering a fast conditional X pulse (~60 ns). The closed-loop cycle duration is dominated by dispersive resonator readout integration (2,684 ns), yielding an overall stabilization loop time of τ<sub>loop</sub> ≈ 3.0 µs.</li>
+  <li><b>Active Medium:</b> The quantum state is dynamically sustained through the continuous energy and information exchange between the transmon and the cavity field.</li>
+</ol>
+
+<h2>2 · Experimental Protocol</h2>
+
+<figure class="diagram">
+<pre>
+                  ┌──────────────────────────────────────────────┐
+                  │          Dispersive Cavity Readout           │
+                  │        (Zeno Projection Backaction)          │
+                  └───────────────▲───────────────┬──────────────┘
+                                  │               │
+                            Readout Pulse    Backaction
+                                  │               │
+┌──────────────┐          ┌───────┴───────┐       ▼        ┌──────────────┐
+│  Target |1⟩  │ ───► ─── │  Transmon QPU │ ────────────── │ State Locked │
+│ State Init   │          │  Rx(θ) Drift  │                │ (Metastable  │
+└──────────────┘          └───────┬───────┘                │  Horizon)    │
+                                  │                        └──────────────┘
+                           FPGA Feedforward
+                            Correction (X)
+                                  │
+                                  ▼
+</pre>
+</figure>
+
+<h3>2.1 · State Preparation and Perturbation</h3>
+<ul>
+  <li><b>Target state:</b> |1⟩ = X|0⟩.</li>
+  <li><b>Perturbation operator:</b> R<sub>x</sub>(θ = 0.15π) per cycle.</li>
+  <li><b>Active arm:</b> N cycles of [R<sub>x</sub>(θ) → Measure(q, c<sub>step</sub>) → if c<sub>step</sub> == 0: X(q)], followed by terminal measurement.</li>
+  <li><b>Passive control arm:</b> N unmonitored rotations R<sub>x</sub>(θ) without intermediate measurements or feedback, followed by terminal measurement.</li>
+</ul>
+
+<h3>2.2 · Metric Definition</h3>
+<p>We report the <b>Z-basis target survival probability</b> P|1⟩ = N|1⟩ / N<sub>total</sub>, where N|1⟩ is the count of terminal |1⟩ outcomes over N<sub>total</sub> = 1,000 physical shots. This metric directly reflects state retention against the applied X-rotation without requiring full quantum state tomography.</p>
+
+<h2>3 · Results</h2>
+
+<h3>3.1 · Physical Hardware Execution (<code>ibm_marrakesh</code>)</h3>
+<ul>
+  <li><b>Backend:</b> <code>ibm_marrakesh</code> (156-qubit Heron r2, revision 2.1.0)</li>
+  <li><b>Physical qubit:</b> Qubit 0</li>
+  <li><b>Daily backend calibration data (2026-11-08, 08:04 UTC report):</b>
+    <ul>
+      <li>Energy relaxation: T₁ = 373.22 µs</li>
+      <li>Coherence dephasing: T₂ = 35.05 µs</li>
+      <li>Readout error: 3.125% (p(0|1) = 5.47%, p(1|0) = 0.78%)</li>
+      <li>Single-qubit initialization error: 0.098%</li>
+      <li>Readout pulse duration: 2,684 ns</li>
+    </ul>
+  </li>
+  <li><b>Compiler pass:</b> Qiskit 2.4 Preset Pass Manager (<code>optimization_level=1</code>)</li>
+  <li><b>Execution mode:</b> Qiskit Runtime SamplerV2 (<code>shots=1000</code>, job <code>dbo63b5t7fqc73akk78g</code>, submitted 11:57:26 UTC)</li>
+</ul>
+
+<table>
+  <caption>Single-qubit active Zeno dynamics vs passive control — raw, unmitigated counts.</caption>
+  <thead>
+    <tr><th>Experimental arm</th><th class="mid">Measured P|1⟩</th><th class="mid">Shots retained</th><th class="mid">95% CI (Wilson)</th><th>Physical status</th></tr>
+  </thead>
+  <tbody>
+    <tr class="hi"><td><b>Active Zeno dynamic arm</b></td><td class="num"><b>97.20%</b></td><td class="num"><b>972 / 1,000</b></td><td class="num"><b>[95.98%, 98.06%]</b></td><td>Z-basis pinned in target eigenstate |1⟩ via active feedforward</td></tr>
+    <tr><td><b>Passive control arm</b></td><td class="num"><b>50.10%</b></td><td class="num"><b>501 / 1,000</b></td><td class="num"><b>[47.01%, 53.19%]</b></td><td>Rotated pure state under unmitigated R<sub>x</sub>(θ) drive (P|1⟩ ≈ 50.1%)</td></tr>
+    <tr class="hi"><td><b>Net Zeno advantage (ΔP|1⟩)</b></td><td class="num"><b>+47.10 pp</b></td><td class="num"><b>+471 shots</b></td><td class="num"><b>[+43.84 pp, +50.36 pp]</b></td><td><b>Confirmed on physical hardware (unpooled z = 28.29, pooled z = 23.91, two-sided p &lt; 10⁻¹⁵)</b></td></tr>
+  </tbody>
+</table>
+<p class="legend">Exact two-sided binomial p-values for the same comparison: unpooled p = 4.8 × 10⁻¹⁷⁶, pooled p = 2.6 × 10⁻¹²⁶. The interval for ΔP is the Newcombe–Wald interval on the difference of proportions (unpooled standard error, z = 1.96).</p>
+
+<div class="callout gold">
+  <span class="lead">Note on readout error ceiling and calibration drift</span>
+  <p>The nominal backend calibration report at 08:04 UTC indicated an assignment error p(0|1) = 5.47%, which would impose a theoretical static unmitigated detection ceiling of 1 − p(0|1) = 94.53%. The unmitigated physical execution of job <code>dbo63b5t7fqc73akk78g</code> at 11:57 UTC recorded 972/1,000 raw counts (97.20% ± 1.04 pp). This +2.67 pp excess over static nominal calibration reflects empirical temporal drift in transmon discriminator thresholds / readout resonator frequency over the ~4 hours between calibration and execution (indicating real-time p(0|1) ≤ 2.80% during run, <b>inferred</b> from the observed survival under the hypothesis of parameter drift, not directly measured via a contemporaneous isolated |1⟩ calibration circuit), rather than post-hoc error mitigation (all counts reported are unmitigated raw bitstrings).</p>
+</div>
+
+<h3>3.2 · Physical Multi-Qubit Demonstration: 2-Qubit Entangled Bell State (|Φ+⟩)</h3>
+<ul>
+  <li><b>Target backend:</b> <code>ibm_marrakesh</code> (156-qubit Heron r2 processor)</li>
+  <li><b>Physical hardware job ID:</b> <code>dbo6lqgou4as73b5jdag</code> (submitted 12:29:24 UTC)</li>
+  <li><b>Topology:</b> physical transmons Q0 and Q2 (logical data qubits q₀, q₁) coupled via qubit 1 (ancilla transmon)</li>
+  <li><b>Target entangled state:</b> |Φ+⟩ = (|00⟩ + |11⟩)/√2</li>
+  <li><b>Active mechanism:</b> non-destructive parity stabilizer S = Z<sub>q₀</sub>Z<sub>q₁</sub> = Z<sub>Q0</sub>Z<sub>Q2</sub>, measured via ancilla Q1 + fast feedforward restoration</li>
+  <li><b>Terminal verification:</b> Bell-basis inversion (CX → H → Measure), where |00⟩ indicates |Φ+⟩ parity retention</li>
+  <li><b>Total physical shots:</b> 1,000 per arm (execution date 2026-11-08)</li>
+</ul>
+
+<table>
+  <caption>Two-qubit parity subspace survival — active Zeno arm vs passive control.</caption>
+  <thead>
+    <tr><th>Experimental arm</th><th class="mid">Measured P|Φ+⟩</th><th class="mid">Shots retained</th><th class="mid">95% CI (Wilson)</th><th>Physical status</th></tr>
+  </thead>
+  <tbody>
+    <tr class="hi"><td><b>Active parity Zeno arm</b></td><td class="num"><b>33.60%</b></td><td class="num"><b>336 / 1,000</b></td><td class="num"><b>[30.74%, 36.59%]</b></td><td>Parity subspace protected (3× survival vs passive), but below bipartite GME threshold (F ≤ 50%)</td></tr>
+    <tr><td><b>Passive control arm</b></td><td class="num"><b>10.90%</b></td><td class="num"><b>109 / 1,000</b></td><td class="num"><b>[9.12%, 12.98%]</b></td><td>Rotational dispersion and dephasing below random mixed floor (25%)</td></tr>
+    <tr class="hi"><td><b>Net parity survival advantage (ΔP)</b></td><td class="num"><b>+22.70 pp</b></td><td class="num"><b>+227 shots</b></td><td class="num"><b>[+19.19 pp, +26.21 pp]</b></td><td><b>Confirmed on physical hardware (unpooled z = 12.69, pooled z = 12.20, two-sided p = 7.1 × 10⁻³⁷ unpooled / 3.0 × 10⁻³⁴ pooled)</b></td></tr>
+  </tbody>
+</table>
+
+<div class="eq">ΔP|Φ+⟩ = P<sub>active</sub> − P<sub>passive</sub> = +22.70% &nbsp;(unpooled z = 12.69, pooled z = 12.20, two-sided p = 7.1 × 10⁻³⁷ unpooled)</div>
+
+<div class="callout">
+  <span class="lead">Academic arbitration on Bell state entanglement</span>
+  <p>While the active parity circuit triples parity subspace survival (33.60% vs 10.90%, +22.70 pp, unpooled z = 12.69), the state remains 16.40 pp below the bipartite entanglement witness threshold (F &gt; 50.0%). The ZZ parity stabilizer protects computational bit-flip parities, but does not protect against phase dephasing. <b>Genuine bipartite entanglement was not preserved.</b></p>
+</div>
+
+<h3>3.3 · Physical 3-Qubit GHZ Genuine Multipartite Entanglement (GME) Witness</h3>
+<ul>
+  <li><b>Target backend:</b> <code>ibm_marrakesh</code> (156-qubit Heron r2 processor)</li>
+  <li><b>Physical hardware job ID:</b> <code>dbo6t18qtr0c73ae383g</code> (submitted 13:08:26 UTC)</li>
+  <li><b>Topology:</b> 5 physical transmons in a linear chain Q0 — Q1 — Q2 — Q3 — Q4. Logical data qubits q₀, q₁, q₂ map to physical transmons Q0, Q2, Q4; ancilla transmons Q1 and Q3 measure the non-destructive parity stabilizers S₁ = Z<sub>q₀</sub>Z<sub>q₁</sub> and S₂ = Z<sub>q₁</sub>Z<sub>q₂</sub>.</li>
+  <li><b>Target tripartite state:</b> |GHZ₃⟩ = (|000⟩ + |111⟩)/√2</li>
+  <li><b>Tomographic protocol:</b> 5 Pauli bases (ZZZ, XXX, XYY, YXY, YYX) across 10 circuits</li>
+  <li><b>Total physical shots:</b> <b>10,000</b> (1,000 per basis per arm, execution date 2026-11-08)</li>
+</ul>
+
+<h4>Circuit complexity &amp; physical gate overhead</h4>
+<p>Re-transpiled locally against the live <code>ibm_marrakesh</code> target (Qiskit 2.4.2, <code>optimization_level=1</code>, layouts [0,2,4,1,3] active / [0,2,4] passive):</p>
+<ul>
+  <li><b>Active arm:</b> <b>26 native CZ gates, 6 mid-circuit measurements (+3 terminal readout), 6 dynamic resets, 6 conditional feedforward branches</b>. Circuit depth is 59 for the <code>ZZZ</code> basis and 61–62 for the four transverse bases. Total mid-circuit readout integration = 6 × 2,684 ns ≈ 16.1 µs, consuming 46% of transmon dephasing time (T₂ = 35.05 µs).</li>
+  <li><b>Passive arm:</b> <b>8 native CZ gates, 0 mid-circuit measurements (3 terminal readout measurements), 0 dynamic resets, 0 feedforward branches</b>. Circuit depth is 19 for the <code>ZZZ</code> basis and 18–23 for the four transverse bases.</li>
+</ul>
+
+<h4>Fidelity formulation</h4>
+<div class="eq">F<sub>GHZ</sub> = (P<sub>000</sub> + P<sub>111</sub>)/2 + ⅛ ( ⟨XXX⟩ − ⟨XYY⟩ − ⟨YXY⟩ − ⟨YYX⟩ )</div>
+
+<table>
+  <caption>Five-basis GME witness components — active Zeno arm vs passive control.</caption>
+  <thead>
+    <tr><th>Component / metric</th><th class="mid">Active Zeno arm</th><th class="mid">Passive control arm</th><th class="mid">Net advantage (Δ)</th><th>Physical interpretation</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>P<sub>000</sub> (Z-basis)</b></td><td class="num"><b>51.20%</b></td><td class="num">13.80%</td><td class="num">+37.40 pp</td><td>Ground state subspace pinned</td></tr>
+    <tr><td><b>P<sub>111</sub> (Z-basis)</b></td><td class="num"><b>27.30%</b></td><td class="num">11.90%</td><td class="num">+15.40 pp</td><td>Excited subspace pinned</td></tr>
+    <tr><td><b>Population (P<sub>000</sub>+P<sub>111</sub>)/2</b></td><td class="num"><b>39.25%</b></td><td class="num"><b>12.85%</b></td><td class="num"><b>+26.40 pp</b></td><td><b>&gt;3× population retention vs random mixed floor (12.5%)</b></td></tr>
+    <tr><td>⟨XXX⟩ expectation</td><td class="num">−0.050</td><td class="num">+0.894</td><td class="num">—</td><td>Commutation with R<sub>x</sub>(θ): [R<sub>x</sub>, X] = 0 preserves passive; active dephases</td></tr>
+    <tr><td>⟨XYY⟩ expectation</td><td class="num">+0.104</td><td class="num">+0.004</td><td class="num">—</td><td>Stabilizer correlation</td></tr>
+    <tr><td>⟨YXY⟩ expectation</td><td class="num">−0.004</td><td class="num">−0.012</td><td class="num">—</td><td>Stabilizer correlation</td></tr>
+    <tr><td>⟨YYX⟩ expectation</td><td class="num">+0.060</td><td class="num">+0.004</td><td class="num">—</td><td>Stabilizer correlation</td></tr>
+    <tr><td><b>Coherence Re[ρ<sub>000,111</sub>]</b></td><td class="num"><b>−2.63%</b></td><td class="num"><b>+11.22%</b></td><td class="num"><b>−13.85 pp</b></td><td><b>Active Zeno destroys phase coherence via projective dephasing &amp; gate noise</b></td></tr>
+    <tr class="hi"><td><b>Total GHZ fidelity (F<sub>GHZ</sub>)</b></td><td class="num"><b>36.62%</b><br>[95% CI: ±2.00%]</td><td class="num"><b>24.07%</b><br>[95% CI: ±1.94%]</td><td class="num"><b>+12.55%</b><br>[95% CI: ±2.79%]</td><td><b>Population gain outweighs phase loss; GME not preserved (unpooled z = 8.83, p = 1.1 × 10⁻¹⁸)</b></td></tr>
+  </tbody>
+</table>
+<p class="legend">Note on statistical uncertainty: the error margins ±2.00%, ±1.94% and ±2.79% are 95% confidence intervals (1.96 × SE) propagated from the independent multinomial variances of the five tomographic basis measurements.</p>
+
+<div class="callout gold">
+  <span class="lead">Rigorous scientific conclusion — GME falsification &amp; phase decoherence mechanism</span>
+  <ol>
+    <li><b>Why passive ⟨XXX⟩ = +0.894:</b> the perturbation drive R<sub>x</sub>(θ) = exp(−i·θ/2·X) strictly commutes with the Pauli X operator ([R<sub>x</sub>(θ), X] = 0). In the passive circuit the drive mathematically cannot rotate the state out of the XXX eigenspace; ⟨XXX⟩ degrades only through background thermal relaxation across its minimal depth (19 gates).</li>
+    <li><b>Why active destroys phase coherence (Re[ρ] = −2.63% vs +11.22%):</b> repeated non-destructive ZZ syndrome projections project the superposition onto the Z-eigenbasis subspace, acting as an aggressive phase-dephasing channel that converts (|000⟩ + |111⟩)/√2 into an incoherent classical mixture ½(|000⟩⟨000| + |111⟩⟨111|). Combined with the accumulated noise of 26 physical CZ gates and 16.1 µs of mid-circuit measurement idle dephasing (T₂ = 35.05 µs), phase coherence is completely eradicated.</li>
+    <li><b>The arbitration:</b> <b>active Zeno stabilization does NOT preserve genuine multipartite entanglement (F<sub>active</sub> = 36.62% ≤ 50.0%)</b>. It provides powerful, statistically verified stabilization of classical bit populations (39.25% vs 12.85%) but destroys quantum phase coherence. Preserving tripartite entanglement under continuous Zeno dynamics fundamentally requires transverse stabilizer measurements (e.g. interleaving an XXX stabilizer) to protect the phase degree of freedom.</li>
+  </ol>
+</div>
+
+<h3>3.4 · Simulation Benchmark (Qiskit Aer Thermal Noise)</h3>
+<p>Under realistic transmon thermal noise (T₁ = 80 µs, T₂ = 100 µs, gate time = 30 ns, readout time = 800 ns), 2,000 shots per point:</p>
+
+<table>
+  <caption>Noise-model benchmark — exact simulator values (2,000 shots per point).</caption>
+  <thead>
+    <tr><th class="mid">Cycles (N)</th><th class="mid">Passive control P|1⟩</th><th class="mid">Active Zeno P|1⟩</th><th class="mid">Net delta (ΔP|1⟩)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="num"><b>N = 5</b></td><td class="num">15.15%</td><td class="num"><b>99.00%</b></td><td class="num"><b>+83.85%</b></td></tr>
+    <tr><td class="num"><b>N = 10</b></td><td class="num">49.70%</td><td class="num"><b>99.35%</b></td><td class="num"><b>+49.65%</b></td></tr>
+    <tr><td class="num"><b>N = 20</b></td><td class="num"><b>0.65%</b></td><td class="num"><b>98.90%</b></td><td class="num"><b>+98.25%</b></td></tr>
+    <tr><td class="num"><b>N = 30</b></td><td class="num">49.70%</td><td class="num"><b>98.95%</b></td><td class="num"><b>+49.25%</b></td></tr>
+  </tbody>
+</table>
+<p class="legend">In the preliminary draft the N = 5 delta was recorded as 83.9% due to intermediate rounding; the exact difference is 99.00% − 15.15% = 83.85%. The table above carries the exact simulator values throughout; the underlying simulation outputs are unchanged.</p>
+
+<h2>4 · Limitations and Future Work</h2>
+<ol>
+  <li><b>Multi-qubit scaling:</b> single-qubit state preservation (Δ = +47.10 pp), 2-qubit entangled Bell-state parity protection (Δ = +22.70 pp) and 3-qubit GHZ population stabilization (&gt;3× advantage over passive decay) have all been demonstrated on physical hardware (<code>ibm_marrakesh</code>). Scaling to 2D topological surface-code tiles and higher-order stabilizer lattices remains the next development milestone.</li>
+  <li><b>Metric scope:</b> we measure computational Z-basis retention P|1⟩, Bell-basis parity survival P|Φ+⟩, and five-basis GME witness operators for tripartite GHZ states. Full multi-qubit state tomography and randomized benchmarking across cycle depths (N ∈ [5, 100]) are planned to further quantify phase coherence degradation.</li>
+  <li><b>Temporal scope:</b> physical hardware trials evaluated N = 10 single-qubit, N = 4 two-qubit Bell and N = 3 three-qubit GHZ dynamic cycles. Extended testing up to N = 100 cycles will probe the asymptotic equilibrium fidelity limit imposed by two-qubit CZ gate errors and FPGA latency.</li>
+  <li><b>Calibration-coupling caveat:</b> the single-qubit arm's survival probability exceeds the static nominal readout-error ceiling (94.53%). We attribute this to temporal calibration drift, and we did not run a contemporaneous isolated |1⟩ calibration circuit in the same job — so the drift hypothesis is an <i>inference</i> from the observed survival, not a direct measurement. A follow-up campaign should pair every Zeno job with a back-to-back calibration circuit to close this gap.</li>
+</ol>
+
+<h2>5 · References</h2>
+<ol class="small">
+  <li>B. Misra and E. G. C. Sudarshan, <i>"The Zeno's paradox in quantum theory,"</i> Journal of Mathematical Physics <b>18</b>, 756–763 (1977).</li>
+  <li>P. Facchi and S. Pascazio, <i>"Quantum Zeno dynamics,"</i> Physical Review Letters <b>89</b>, 080401 (2002).</li>
+  <li>H. M. Wiseman and G. J. Milburn, <i>"Quantum Measurement and Control,"</i> Cambridge University Press (2009).</li>
+  <li>S. Krinner et al., <i>"Realization of real-time fault-tolerant quantum error correction on a superconducting processor,"</i> Nature <b>605</b>, 669–674 (2022).</li>
+  <li>IBM Quantum, <i>"Dynamic Circuits and OpenQASM 3 Specification,"</i> IBM Research (2023).</li>
+  <li>M. Róbert, <i>"Pooled Exploration/Confirmation Meta-Analysis across 1,016 Superconducting Hardware Jobs,"</i> GitHub repository <code>silentnoisehun/quantum-pooled-holdout</code> (2026).</li>
+</ol>
+
+<h2>6 · Reproducibility &amp; Verification Notes</h2>
+<p>Every quantitative claim in Sections 3.1–3.4 was re-derived from the committed raw files in <code>measurement_raw/</code> by <code>scripts/verify_paper_statistics.py</code> — offline, no credentials, no QPU time:</p>
+<pre class="bib"><span class="k">$</span> python scripts/verify_paper_statistics.py
+...
+60/60 ellenorzes sikeres.</pre>
+<p>The script recomputes, from the raw count dictionaries only: the arm probabilities, the Wilson confidence intervals, the Newcombe–Wald interval on the probability difference, the unpooled and pooled two-proportion z-scores, and the exact two-sided binomial p-values; it re-assembles the GHZ GME fidelity from its five tomographic components and propagates the confidence intervals into the fidelity-difference z-score.</p>
+
+<h3>6.1 · Verification ledger</h3>
+<table>
+  <caption>Claim-by-claim comparison: value published in this document vs value re-derived from the raw data.</caption>
+  <thead>
+    <tr><th>Claim</th><th class="mid">Published here</th><th class="mid">Re-derived</th><th class="mid">Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Single-qubit active survival</td><td class="num">972/1,000 = 97.20%</td><td class="num">972/1,000 = 97.20%</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Single-qubit passive survival</td><td class="num">501/1,000 = 50.10%</td><td class="num">501/1,000 = 50.10%</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Single-qubit active Wilson CI</td><td class="num">[95.98%, 98.06%]</td><td class="num">[95.983%, 98.056%]</td><td class="mid ok">✔ reproducible <b>(corrected)</b></td></tr>
+    <tr><td>Single-qubit passive Wilson CI</td><td class="num">[47.01%, 53.19%]</td><td class="num">[47.007%, 53.193%]</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>ΔP|1⟩ interval</td><td class="num">+43.84 … +50.36 pp</td><td class="num">+43.837 … +50.363 pp</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Single-qubit z (unpooled / pooled)</td><td class="num">28.29 / 23.91</td><td class="num">28.288 / 23.907</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Single-qubit two-sided p</td><td class="num">&lt; 10⁻¹⁵</td><td class="num">4.8×10⁻¹⁷⁶ / 2.6×10⁻¹²⁶</td><td class="mid ok">✔ holds</td></tr>
+    <tr><td>Bell active / passive survival</td><td class="num">33.60% / 10.90%</td><td class="num">336/1,000, 109/1,000</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Bell Wilson CIs</td><td class="num">[30.74, 36.59] / [9.12, 12.98]</td><td class="num">[30.740, 36.585] / [9.116, 12.983]</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>ΔP|Φ+⟩ interval</td><td class="num">+19.19 … +26.21 pp</td><td class="num">+19.193 … +26.207 pp</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>Bell z (unpooled / pooled)</td><td class="num">12.69 / 12.20</td><td class="num">12.686 / 12.204</td><td class="mid ok">✔ matches <b>(corrected)</b></td></tr>
+    <tr><td>Bell two-sided p</td><td class="num">7.1×10⁻³⁷ (unpooled)</td><td class="num">7.1×10⁻³⁷ / 3.0×10⁻³⁴ pooled</td><td class="mid ok">✔ reproducible <b>(corrected)</b></td></tr>
+    <tr><td>GHZ F<sub>active</sub> / F<sub>passive</sub></td><td class="num">36.62% / 24.07%</td><td class="num">0.36625 / 0.24075</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>GHZ ΔF</td><td class="num">+12.55 pp</td><td class="num">+12.550 pp</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>GHZ fidelity-difference z / p</td><td class="num">8.83 / 1.1×10⁻¹⁸</td><td class="num">8.828 / 1.07×10⁻¹⁸</td><td class="mid ok">✔ matches</td></tr>
+    <tr><td>GHZ active ISA (CZ / reset / if_else)</td><td class="num">26 / 6 / 6</td><td class="num">26 / 6 / 6</td><td class="mid ok">✔ re-transpiled</td></tr>
+    <tr><td>GHZ passive ISA (CZ / if_else)</td><td class="num">8 / 0</td><td class="num">8 / 0</td><td class="mid ok">✔ re-transpiled</td></tr>
+    <tr><td>Qubit-0 calibration (T₁, T₂, readout err., pulse)</td><td class="num">373.22 µs, 35.05 µs, 3.125%, 2,684 ns</td><td class="num">373.22 µs, 35.05 µs, 3.125%, 2,684 ns</td><td class="mid ok">✔ live backend</td></tr>
+    <tr><td>Aer benchmark rows (N = 5, 10, 20, 30)</td><td class="num">see §3.4</td><td class="num">0.1515/0.9900, 0.4970/0.9935, 0.0065/0.9890, 0.4970/0.9895</td><td class="mid ok">✔ matches</td></tr>
+  </tbody>
+</table>
+
+<h3>6.2 · Corrections applied in v1.3.1</h3>
+<ol>
+  <li><b>Active-arm Wilson interval (§3.1 and abstract).</b> v1.3.0 reported [95.96%, 98.08%] for 972/1,000. No standard interval method reproduces that pair under the stated "Wilson" label: Wilson gives [95.983%, 98.056%], Wilson with continuity correction [95.933%, 98.106%], Agresti–Coull 95% [95.967%, 98.071%], Clopper–Pearson [95.979%, 98.132%]. The published value is replaced by the Wilson value — the method named in the table, and the one that reproduces the other three arm intervals of the paper exactly. The abstract half-width changes accordingly from ±1.02 pp to ±1.04 pp.</li>
+  <li><b>Bell-arm p-value (§3.2).</b> v1.3.0 quoted a single p = 7.6×10⁻³⁷ next to two z-scores. The exact value for the unpooled statistic is 7.1×10⁻³⁷; the pooled statistic gives 3.0×10⁻³⁴. Both are now stated explicitly, and the unpooled z-score is given as 12.69 (was 12.68) to match the recomputation.</li>
+  <li><b>Active-arm CZ count (§3.3).</b> v1.3.0 stated 23 native CZ gates. Re-transpiling the same builder output against the live <code>ibm_marrakesh</code> target yields 26 CZ gates for all five tomographic bases. The circuit-depth figures of v1.3.0 correspond to the <code>ZZZ</code> basis only; the depth ranges across the five bases are now given.</li>
+  <li><b>Passive-arm measurement count (§3.3).</b> "0 measurements" is replaced by "0 mid-circuit measurements (3 terminal readout measurements)", which is what the transpiled circuit contains.</li>
+  <li><b>Version consistency.</b> The <code>README.md</code> BibTeX block, <code>CITATION.cff</code> and the <code>.zenodo.json</code> description are aligned to v1.3.1, and the Zenodo description quotes the corrected p = 7.1×10⁻³⁷ instead of 3.8×10⁻³⁷.</li>
+  <li><b>New limitation (§4.4).</b> The readout-drift hypothesis for the single-qubit arm is explicitly flagged as an inference, not a contemporaneous measurement.</li>
+</ol>
+
+<h3>6.3 · What was <i>not</i> changed</h3>
+<ul>
+  <li>No headline result, sign or scientific conclusion was altered. The GME falsification, the Bell-state arbitration and the Zeno advantage stand exactly as published.</li>
+  <li>The raw files in <code>measurement_raw/</code> were not modified; they are the ground truth for every number above.</li>
+  <li>The Aer table is reported with the exact simulator values instead of the draft's one-decimal rounding; the underlying simulation outputs are unchanged.</li>
+</ul>
+
+<h2>Citation</h2>
+<pre class="bib"><span class="k">@software</span>{robert2026active_space_memory,
+  author       = {Róbert, Máté},
+  title        = {Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors},
+  month        = nov,
+  year         = 2026,
+  publisher    = {Zenodo / GitHub},
+  version      = {v1.3.1},
+  url          = {https://github.com/silentnoisehun/quantum-active-space-memory}
+}</pre>
+
+<footer>
+  <span>Quantum Active Space Memory · v1.3.1 · MIT License</span>
+  <span>Numbers re-derived from <code>measurement_raw/</code> on 2026-11-08 · no QPU time consumed for verification</span>
+</footer>
+
+</article>
+</body>
+</html>
