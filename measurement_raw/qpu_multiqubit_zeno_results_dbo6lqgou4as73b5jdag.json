@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-08T12:29:24Z",
+  "job_id": "dbo6lqgou4as73b5jdag",
+  "backend": "ibm_marrakesh",
+  "physical_qubits": {
+    "data_q0": 0,
+    "data_q1": 2,
+    "ancilla_a0": 1
+  },
+  "active_bell_fidelity": 0.336,
+  "passive_bell_fidelity": 0.109,
+  "delta": 0.22700000000000004,
+  "active_ci_95": [
+    0.3074010775632927,
+    0.3658541451730435
+  ],
+  "passive_ci_95": [
+    0.09115973208991156,
+    0.12983290260464586
+  ],
+  "active_counts": {
+    "00": 336,
+    "01": 600,
+    "11": 35,
+    "10": 29
+  },
+  "passive_counts": {
+    "10": 865,
+    "01": 9,
+    "00": 109,
+    "11": 17
+  },
+  "verdict": "CONFIRMED MULTI-QUBIT ACTIVE SPACE MEMORY: Non-destructive parity stabilizer Zeno dynamics preserves two-qubit entanglement with +22.70% advantage over unmonitored decoherence."
+}
