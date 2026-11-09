@@ -1,9 +1,10 @@
 {
-  "title": "Quantum Active Space Memory: Experimental Demonstration of Active Quantum Zeno Dynamics on IBM Quantum Heron Processors",
-  "description": "Physical experimental hardware evaluation of Active Quantum Space Memory on the 156-qubit IBM Quantum Heron processor (ibm_marrakesh). Demonstrates that Active Zeno dynamic feedforward pins computational populations in single-qubit states (97.20% vs 50.10%, delta = +47.10%, p < 10^-15), two-qubit Bell parity states (33.60% vs 10.90%, delta = +22.70%, p = 7.1e-37 unpooled / 3.0e-34 pooled), and three-qubit GHZ populations (39.25% vs 12.85%, >3x retention over 12.5% mixed floor). Tomographic 5-basis Genuine Multipartite Entanglement (GME) witness analysis proves that while classical bit populations are stabilized, non-destructive ZZ Zeno projections destroy off-diagonal phase coherence (-13.85pp vs passive), falsifying entanglement preservation (F_active = 36.62% <= 50.0%) and establishing that multipartite entanglement protection strictly requires transverse stabilizer dynamics. All reported statistics are re-derivable from the committed raw measurement files via scripts/verify_paper_statistics.py (60/60 checks).",
+  "title": "Quantum Active Space Memory: Active Quantum Zeno Dynamics on IBM Quantum Heron Processors",
+  "description": "Physical experimental hardware evaluation of Active Quantum Space Memory on the 156-qubit IBM Quantum Heron processor (ibm_marrakesh). Demonstrates that Active Zeno dynamic feedforward pins computational populations in single-qubit states (97.45% vs 0.10%, delta = +97.35%, p < 10^-15 at N=20), two-qubit Bell parity states (33.60% vs 10.90%, delta = +22.70%, p = 7.1e-37 unpooled / 3.0e-34 pooled), and three-qubit GHZ populations (39.25% vs 12.85%, >3x retention over 12.5% mixed floor). Tomographic 5-basis Genuine Multipartite Entanglement (GME) witness analysis proves that while classical bit populations are stabilized, non-destructive ZZ Zeno projections destroy off-diagonal phase coherence (-13.85pp vs passive), falsifying entanglement preservation (F_active = 36.62% <= 50.0%) and establishing that multipartite entanglement protection strictly requires transverse stabilizer dynamics. The preregistered N=20 run (job dbokrbk4148s739t68ig) with in-job readout calibration meets all three gate clauses: delta = +0.9735, p approx 0, N = 20. In-job readout error p(0|1) was 0.45% (daily calibration: 5.47%), which resolves the v1.3.1 readout ceiling anomaly. All reported statistics are re-derivable from the committed raw measurement files via scripts/verify_paper_statistics.py (60/60 checks).",
   "creators": [
     {
       "name": "Róbert, Máté",
+      "affiliation": "Independent researcher",
       "orcid": "0009-0003-3986-6039"
     }
   ],
@@ -15,7 +16,11 @@
     "Active Space Memory",
     "Dynamic Circuits",
     "Superconducting Transmon",
-    "IBM Quantum"
+    "IBM Quantum",
+    "Preregistration",
+    "Mid-circuit Measurement"
   ],
+  "version": "1.3.3",
+  "publication_date": "2026-11-09",
   "upload_type": "software"
 }

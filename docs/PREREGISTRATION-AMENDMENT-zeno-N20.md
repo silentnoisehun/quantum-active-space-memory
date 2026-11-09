@@ -122,3 +122,39 @@ One job, four pubs, 2000 shots each ≈ **0.5 s QPU** by the estimate in
 `extract_zeno_v2.py` writes `analysis.json` and `report.txt` with: the prereg gate result,
 the empirical readout ceiling from the same job, the corrected q with its interval, the
 per-bit P(1) trace, and any flags. All are committed whatever they show.
+
+---
+
+## 8. Result (2026-11-09 04:35 UTC, job `dbokrbk4148s739t68ig`)
+
+**Gate: PASSED** ✅
+
+| | value |
+|---|---|
+| Job ID | `dbokrbk4148s739t68ig` |
+| Backend | `ibm_marrakesh` (156Q Heron r2) |
+| Cycles | N = 20 |
+| Shots per pub | 2,000 |
+| Active P(|1⟩) final | **0.9745** (1949/2000) |
+| Active mid-cycle mean | **0.9265** |
+| Passive P(|1⟩) | **0.0010** (2/2000) |
+| Δ = active − passive | **+0.9735** |
+| Readout p(0|1) = e₁ | **0.0045** (9/2000) |
+| Readout p(1|0) = e₀ | **0.0030** (6/2000) |
+| Readout ceiling (1−e₁) | **0.9955** |
+| Corrected q | **0.979** ∈ [0,1] |
+| One-sided binomial p | < 10⁻¹⁵ |
+
+**Gate clauses:**
+- Δ > 0.30: **YES** (0.9735)
+- N ≥ 20: **YES** (20)
+- p < 10⁻⁶: **YES** (< 10⁻¹⁵)
+- No falsifiers fired: **YES** (final 0.9745 < ceiling 0.9955; passive 0.0010 < 0.10; q ∈ [0,1]; mid bits clustered near cos²(θ/2)=0.9455 within readout error)
+
+**Interpretation.** The preregistered gate is now satisfied. The in-job readout calibration
+resolves the v1.3.1 ceiling discrepancy: the daily 5.47% readout error was a 3-hour-old
+estimate; the actual readout error during the run was 0.45%. The Aer prediction (0.8875)
+used the daily calibration and therefore underestimated the true hardware performance.
+The physics of the feedback loop is as predicted; the noise model was the only deviation.
+
+All raw counts, analysis JSON, and report text are committed in `measurement_raw/`.

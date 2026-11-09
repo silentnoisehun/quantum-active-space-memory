@@ -115,11 +115,11 @@ def get_counts(a):
     from qiskit_ibm_runtime import QiskitRuntimeService
     import os
     api_key = os.environ.get("QISKIT_IBM_RUNTIME_API_KEY") or os.environ.get("IBM_API_KEY")
-    crn = 'crn:v1:bluemix:public:quantum-computing:us-east:a/850d7f5ad80c4beab980d2b4bdec250d:38cf48ed-daeb-4efb-b709-c8c25dbbbc7a::'
+    instance = os.environ.get("IBM_QUANTUM_INSTANCE", "auto")
     if api_key:
-        svc = QiskitRuntimeService(channel="ibm_quantum_platform", token=api_key, instance=crn)
+        svc = QiskitRuntimeService(channel="ibm_quantum_platform", token=api_key, instance=instance)
     else:
-        svc = QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
+        svc = QiskitRuntimeService(channel="ibm_quantum_platform", instance=instance)
     res = svc.job(a.job).result()
     return {"active": res[0].data.c.get_counts(),
             "passive": res[1].data.c_final.get_counts(),

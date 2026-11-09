@@ -4,8 +4,8 @@
 
 **Author:** Máté Róbert (ORCID: [0009-0003-3986-6039](https://orcid.org/0009-0003-3986-6039))
 **Repository:** https://github.com/silentnoisehun/quantum-active-space-memory
-**Version:** v1.3.2 (claim-correction release, 2026-11-09)
-**Hardware:** `ibm_marrakesh` (156-qubit Heron r2) — four jobs, 2026-11-08
+**Version:** v1.3.3 (N=20 prereg gate PASSED, 2026-11-09)
+**Hardware:** `ibm_marrakesh` (156-qubit Heron r2) — five jobs total (four v1.3.2 + one N=20 v1.3.3)
 
 ---
 
@@ -195,6 +195,47 @@ A value q > 1 is not physical. Two readings are possible, and this run cannot di
 **Resolution, committed:** the amendment carries `cal_1` and `cal_0` in the same job, in the
 same seconds as the Zeno arms. Until that runs, the 97.20% should be quoted **with** the
 ceiling, never alone.
+
+#### N = 20 result (job `dbokrbk4148s739t68ig`, 2026-11-09 04:35 UTC)
+
+The preregistered gate has now been tested. One job, four pubs (active N=20, passive N=20,
+`cal_1`, `cal_0`), `ibm_marrakesh`, 2000 shots per pub.
+
+| | value |
+|---|---|
+| Backend / qubit | `ibm_marrakesh`, physical Q0 |
+| Job | `dbokrbk4148s739t68ig`, submitted 2026-11-09 04:35 UTC |
+| Cycles | **N = 20** |
+| Shots | 2,000 per arm |
+| Readout calibration (in-job) | p(0|1) = **0.45%**, p(1|0) = **0.30%**, ceiling = **99.55%** |
+
+| Arm | P(\|1⟩) | Shots | Wilson 95% CI |
+|---|---|---|---|
+| Active Zeno (N=20) | **97.45%** | 1949/2000 | [96.52%, 98.13%] |
+| Passive control (N=20) | **0.10%** | 2/2000 | [0.01%, 0.36%] |
+| Δ | **+97.35 pp** | +1947 | [+96.24, +98.12] pp |
+
+Mid-cycle bits mean: **92.65%** (ideal cos²(θ/2) = 0.9455).
+Terminal vs mid gap: **+0.048** (theory: +0.0545).
+
+**Preregistration gate status: PASSED.**
+
+| gate clause | required | N=20 run | met |
+|---|---|---|---|
+| effect size | Δ > 0.30 | Δ = 0.9735 | ✅ |
+| significance | p < 10⁻⁶ | p < 10⁻¹⁵ | ✅ |
+| **cycle count** | **N ≥ 20** | **N = 20** | ✅ |
+
+**Readout ceiling resolved.** The in-job calibration gives p(0|1) = 0.45% (vs daily 5.47%),
+so the ceiling is 99.55%. The observed 97.45% is **below the ceiling** — physically consistent.
+Corrected q = (0.9745 − 0.0030) / (1 − 0.0030 − 0.0045) = **0.979** ∈ [0,1].
+
+**Prediction vs measurement.** The pre-run Aer prediction (committed before the run,
+`scripts/aer_predict.py` / `prediction.json`) used the daily calibration (5.47% readout
+error) and predicted active terminal P(|1⟩) = 0.8875. The measured 0.9745 is higher because
+the **actual readout error was 0.45%**, not 5.47%. The physics did not deviate — the noise
+model did. This is an honest forecast error; the forecast and the measurement are both
+reproducible from the committed code.
 
 ### 3.2 Two qubits — parity survival, not entanglement
 

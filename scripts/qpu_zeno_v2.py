@@ -91,11 +91,12 @@ def get_service(key_filename="apikey.json"):
 
     # Check for API key in environment
     api_key = os.environ.get("QISKIT_IBM_RUNTIME_API_KEY") or os.environ.get("IBM_API_KEY")
+    instance = os.environ.get("IBM_QUANTUM_INSTANCE", "auto")
     if api_key:
         return QiskitRuntimeService(
             channel="ibm_quantum_platform",
             token=api_key,
-            instance="crn:v1:bluemix:public:quantum-computing:us-east:a/850d7f5ad80c4beab980d2b4bdec250d:38cf48ed-daeb-4efb-b709-c8c25dbbbc7a::"
+            instance=instance
         )
 
     cands = []
@@ -109,11 +110,12 @@ def get_service(key_filename="apikey.json"):
                 d = json.loads(p.read_text(encoding="utf-8"))
                 tok = d.get("apikey") or d.get("token")
                 if tok:
+                    inst = d.get("instance", "auto")
                     return QiskitRuntimeService(channel="ibm_quantum_platform",
-                                                token=tok, instance=d.get("instance", "auto"))
+                                                token=tok, instance=inst)
             except Exception:
                 pass
-    return QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
+    return QiskitRuntimeService(channel="ibm_quantum_platform", instance=instance)
 
 
 def main():
