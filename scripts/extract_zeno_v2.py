@@ -113,7 +113,13 @@ def get_counts(a):
             return c
         return {"active": {format(i, "021b"): max(1, int(2000 * math.exp(-abs(i - 380) / 90))) for i in range(21)} if False else None}
     from qiskit_ibm_runtime import QiskitRuntimeService
-    svc = QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
+    import os
+    api_key = os.environ.get("QISKIT_IBM_RUNTIME_API_KEY") or os.environ.get("IBM_API_KEY")
+    crn = 'crn:v1:bluemix:public:quantum-computing:us-east:a/850d7f5ad80c4beab980d2b4bdec250d:38cf48ed-daeb-4efb-b709-c8c25dbbbc7a::'
+    if api_key:
+        svc = QiskitRuntimeService(channel="ibm_quantum_platform", token=api_key, instance=crn)
+    else:
+        svc = QiskitRuntimeService(channel="ibm_quantum_platform", instance="auto")
     res = svc.job(a.job).result()
     return {"active": res[0].data.c.get_counts(),
             "passive": res[1].data.c_final.get_counts(),

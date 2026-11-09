@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-11-09T04:22:33Z",
+  "backend": "ibm_marrakesh",
+  "cycles": 20,
+  "shots": 2000,
+  "theta": 0.47123889803846897,
+  "circuit_sha256": {
+    "active": "31f599b187293db3718df2a3e99cf7b9c1215bebd5dff4efe9b0fe5772609d06",
+    "passive": "0287ffa0743fc34bcc39c2c5cc8929486c28e6e606ebd4a405cc240fee8857f0",
+    "cal_1": "3f1b05980d73144558f2557372c5e3d020f95b57c11def4f2072e08f9fd51f37",
+    "cal_0": "901eec716ad020dec89ad465169fad23dd86a86b97ceec0d8ccf8ca4dc74b8a3"
+  },
+  "prereg": "docs/PREREGISTRATION-AMENDMENT-zeno-N20.md",
+  "pubs": {
+    "0": "active",
+    "1": "passive",
+    "2": "cal_1",
+    "3": "cal_0"
+  },
+  "note": "cal_1/cal_0 ugyanabban a jobban -> readout-kalibracio a futas pillanataban"
+}

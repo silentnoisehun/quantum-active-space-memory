@@ -1,0 +1,15 @@
+ASM v2 elemzes  (20 ciklus, 2000 + 2000 loves)
+==============================================================================
+  vegso P(|1>)        = 0.9745   95% CI 0.9666-0.9806
+  kozbulso atlag      = 0.9265
+  passziv P(|1>)      = 0.0010
+  delta               = +0.9735
+  egyoldalu p         = 0.000e+00
+
+  readout p(0|1)      = 0.0045  (ugyanebbol a jobbol)
+  readout p(1|0)      = 0.0015
+  plafon              = 0.9955
+  korrigalt q         = 0.9789
+
+  PREREG: PREREG TELJESULT
+    delta>0.30: True   N>=20: True   p<1e-6: True

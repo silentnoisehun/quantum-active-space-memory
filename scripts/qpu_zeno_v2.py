@@ -28,6 +28,7 @@ from pathlib import Path
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+from qiskit import qasm3
 
 THETA = 0.15 * math.pi
 RAW = Path(__file__).resolve().parent.parent / "measurement_raw"
@@ -78,7 +79,7 @@ def circuit_hashes(n: int):
     h = {}
     for name, qc in [("active", active_zeno(n)), ("passive", passive(n)),
                      ("cal_1", cal_1()), ("cal_0", cal_0())]:
-        blob = json.dumps(qc.qasm(), sort_keys=True).encode()
+        blob = qasm3.dumps(qc).encode()
         h[name] = hashlib.sha256(blob).hexdigest()
     return h
 
@@ -86,6 +87,17 @@ def circuit_hashes(n: int):
 # ---------------------------------------------------------------- service
 def get_service(key_filename="apikey.json"):
     from qiskit_ibm_runtime import QiskitRuntimeService
+    import os
+
+    # Check for API key in environment
+    api_key = os.environ.get("QISKIT_IBM_RUNTIME_API_KEY") or os.environ.get("IBM_API_KEY")
+    if api_key:
+        return QiskitRuntimeService(
+            channel="ibm_quantum_platform",
+            token=api_key,
+            instance="crn:v1:bluemix:public:quantum-computing:us-east:a/850d7f5ad80c4beab980d2b4bdec250d:38cf48ed-daeb-4efb-b709-c8c25dbbbc7a::"
+        )
+
     cands = []
     if os.environ.get("IBM_API_KEY_FILE"):
         cands.append(Path(os.environ["IBM_API_KEY_FILE"]))

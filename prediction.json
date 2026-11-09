@@ -1,0 +1,52 @@
+{
+  "scenario": "ibm_marrakesh q0, 2026-11-08 kalibracio, depolarizing + readout modell",
+  "assumptions": {
+    "p_0_given_1": 0.0547,
+    "p_1_given_0": 0.0078,
+    "T1_us": 373.22,
+    "T2_us": 35.05,
+    "gate_err_rx": 0.0002,
+    "gate_err_x": 0.001,
+    "shots": 4000
+  },
+  "cycles": 20,
+  "predicted": {
+    "active_final_P1": 0.8875,
+    "active_mid_mean_P1": 0.85335,
+    "active_per_bit_P1": [
+      0.8875,
+      0.8465,
+      0.8515,
+      0.8445,
+      0.84675,
+      0.84725,
+      0.861,
+      0.858,
+      0.8575,
+      0.8525,
+      0.84825,
+      0.84775,
+      0.85025,
+      0.84725,
+      0.8485,
+      0.85125,
+      0.85275,
+      0.852,
+      0.8565,
+      0.8555,
+      0.8915
+    ],
+    "passive_P1": 0.01075,
+    "cal_1_P1": 0.947,
+    "cal_0_P1": 0.01075,
+    "delta": 0.8767499999999999,
+    "readout_ceiling": 0.947
+  },
+  "ideal": {
+    "mid_each_bit": 0.9455032620941839,
+    "final": 1.0,
+    "passive": 3.374459510989179e-32,
+    "note": "a vegso bit idealisan 1.0, mert a korrekcio utan m\u00e9runk"
+  },
+  "qpu_cost_estimate_s": 0.51
+}
